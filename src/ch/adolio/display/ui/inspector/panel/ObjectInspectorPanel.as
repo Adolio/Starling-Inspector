@@ -1,0 +1,620 @@
+// =================================================================================================
+//
+//	Starling Inspector
+//	Copyright (c) 2023 Aurelien Da Campo (Adolio), All Rights Reserved.
+//
+//	This program is free software. You can redistribute and/or modify it
+//	in accordance with the terms of the accompanying license agreement.
+//
+// =================================================================================================
+
+package ch.adolio.display.ui.inspector.panel
+{
+	import ch.adolio.display.shape.BorderedRectangle;
+	import ch.adolio.display.ui.inspector.InspectorConfiguration;
+	import ch.adolio.display.ui.inspector.entry.BlendModeInspectorEntry;
+	import ch.adolio.display.ui.inspector.entry.CheckInspectorEntry;
+	import ch.adolio.display.ui.inspector.entry.ColorInspectorEntry;
+	import ch.adolio.display.ui.inspector.entry.ObjectReferenceInspectorEntry;
+	import ch.adolio.display.ui.inspector.entry.SliderInspectorEntry;
+	import ch.adolio.display.ui.inspector.entry.TextInputInspectorEntry;
+	import ch.adolio.display.ui.inspector.entry.TextureInspectorEntry;
+	import ch.adolio.utils.InspectionUtils;
+	import feathers.controls.Button;
+	import flash.geom.Rectangle;
+	import flash.utils.describeType;
+	import starling.animation.IAnimatable;
+	import starling.core.Starling;
+	import starling.display.DisplayObject;
+	import starling.events.Event;
+	import starling.textures.Texture;
+
+	/**
+	 * Inspector panel for any Object.
+	 *
+	 * <p>The `Inspectable` metadata can be used for `Number` field type.
+	 * Usage: `[Inspectable(min=0, max=5.0, step=0.5)]`</p>
+	 */
+	public class ObjectInspectorPanel extends InspectorPanel implements IAnimatable
+	{
+		// object
+		private var _object:Object;
+		private var _hasSizeBeenSetup:Boolean = false;
+
+		// stack
+		private var _objectStack:Vector.<Object> = new Vector.<Object>();
+		private var _backButton:Button;
+
+		// inspection quad
+		private var _boundsIndicator:BorderedRectangle;
+		private var _objectBounds:Rectangle = new Rectangle();
+
+		// native types
+		private const TYPE_BOOLEAN:String = "Boolean";
+		private const TYPE_NUMBER:String = "Number";
+		private const TYPE_INT:String = "int";
+		private const TYPE_UINT:String = "uint";
+		private const TYPE_STRING:String = "String";
+
+		// special types
+		private const TYPE_TEXTURE:String = "starling.textures::Texture";
+
+		// access
+		private const ACCESS_READ_ONLY:String = "readonly";
+		private const ACCESS_READ_WRITE:String = "readwrite";
+
+		// metadata
+		private const INSPECTABLE_METADATA_NAME:String = "Inspectable";
+		private const INSPECTABLE_METADATA_KEY_MIN:String = "min";
+		private const INSPECTABLE_METADATA_KEY_MAX:String = "max";
+		private const INSPECTABLE_METADATA_KEY_STEP:String = "step";
+
+		// singleton
+		private static var _instance:ObjectInspectorPanel;
+		static public function get instance():ObjectInspectorPanel
+		{
+			if (_instance == null)
+				_instance = new ObjectInspectorPanel();
+
+			return _instance;
+		}
+
+		public function ObjectInspectorPanel()
+		{
+			super();
+
+			_backButton = new Button();
+			_backButton.styleName = InspectorConfiguration.STYLE_NAME_PANEL_BACK_BUTTON;
+			_backButton.height = _headerBackground.height;
+			_backButton.label = "Back";
+			_backButton.visible = false;
+			_footer.addChild(_backButton);
+		}
+
+		public function get object():Object
+		{
+			return _object;
+		}
+
+		public function set object(value:Object):void
+		{
+			inspect(value, true, false);
+		}
+
+		/**
+		 * Inspects a given object.
+		 *
+		 * @param value The object to inspect
+		 * @param resetStack Reset the stack (breadcrumb navigation)
+		 * @param stackPreviousObject Stack the object to enable the back button and return to the previous object
+		 */
+		public function inspect(value:Object, resetStack:Boolean, stackPreviousObject:Boolean):void
+		{
+			// reset the breadcrumb
+			if (resetStack)
+				_objectStack.length = 0;
+
+			// stack current object
+			if (object != null && stackPreviousObject)
+				_objectStack.push(object);
+
+			// update the entity
+			_object = value;
+
+			// remove the inspection rectangle, it will be re-added just after if available
+			if (_boundsIndicator)
+				_boundsIndicator.removeFromParent();
+
+			// setup panel
+			if (_object)
+			{
+				// setup title
+				title = InspectionUtils.findObjectName(_object);
+
+				// setup entries
+				setupEntries();
+
+				// update overlay
+				updateInspectionOverlay();
+			}
+			else
+			{
+				// reset title
+				title = "";
+
+				// dispoes all entries
+				_body.removeEntries(true);
+			}
+
+			// force stage re-addition to perfom checks
+			if (parent != null)
+				removeFromParent();
+
+			// setup & add to stage
+			InspectorConfiguration.ROOT_LAYER.addChild(ObjectInspectorPanel.instance);
+
+			// reset stack
+			refreshBackButton();
+		}
+
+		override public function close():void
+		{
+			object = null;
+
+			super.close();
+		}
+
+		private function refreshBackButton():void
+		{
+			_backButton.visible = _objectStack.length > 0;
+		}
+
+		//----------------------------------------------------------------------
+		//-- Entries management
+		//----------------------------------------------------------------------
+
+		private function setupEntries():void
+		{
+			// dispoes all entries
+			_body.removeEntries(true);
+
+			// variable (for static objects)
+			var description:XML = describeType(_object);
+			//Log.debug("Description: " + description + "");
+
+			var type:String;
+			var name:String;
+			var access:String;
+
+			// variables
+			for each (var variable:XML in description.variable)
+			{
+				name = variable.@name;
+				type = variable.@type;
+
+				if (type == TYPE_BOOLEAN)
+					addBooleanEntry(name, ACCESS_READ_WRITE);
+				else if (type == TYPE_NUMBER)
+					addNumberEntry(name, ACCESS_READ_WRITE, variable.metadata);
+				else if (type == TYPE_INT)
+					addIntEntry(name, ACCESS_READ_WRITE);
+				else if (type == TYPE_UINT)
+					addUintEntry(name, ACCESS_READ_WRITE);
+				else if (type == TYPE_STRING)
+					addStringEntry(name, ACCESS_READ_WRITE);
+				else if (type == TYPE_TEXTURE)
+					addTextureEntry(name, ACCESS_READ_WRITE);
+				else
+					addObjectReferenceEntry(name, ACCESS_READ_WRITE);
+			}
+
+			// accessors
+			for each (var accessor:XML in description.accessor)
+			{
+				name = accessor.@name;
+				type = accessor.@type;
+				access = accessor.@access;
+
+				if (type == TYPE_BOOLEAN)
+					addBooleanEntry(name, access);
+				else if (type == TYPE_NUMBER)
+					addNumberEntry(name, access, accessor.metadata);
+				else if (type == TYPE_INT)
+					addIntEntry(name, access);
+				else if (type == TYPE_UINT)
+					addUintEntry(name, access);
+				else if (type == TYPE_STRING)
+					addStringEntry(name, access);
+				else if (type == TYPE_TEXTURE)
+					addTextureEntry(name, access);
+				else
+					addObjectReferenceEntry(name, access);
+			}
+
+			// setup size at the first inspection
+			if (_hasSizeBeenSetup)
+			{
+				setupHeightFromContent();
+				_hasSizeBeenSetup = true;
+			}
+		}
+
+		private function addBooleanEntry(fieldName:String, access:String):void
+		{
+			if (access == ACCESS_READ_ONLY)
+			{
+				addEntry(new CheckInspectorEntry(fieldName,
+					function():Boolean { return _object[fieldName]; },
+					null)
+				);
+			}
+			else if (access == ACCESS_READ_WRITE)
+			{
+				addEntry(new CheckInspectorEntry(fieldName,
+					function():Boolean { return _object[fieldName]; },
+					function(value:Boolean):void { _object[fieldName] = value; })
+				);
+			}
+			else
+			{
+				trace("Unsupported access for field '"+ fieldName +"': " + access);
+			}
+		}
+
+		private function addNumberEntry(fieldName:String, access:String, metadataList:XMLList):void
+		{
+			var value:Number = _object[fieldName];
+
+			// guess best min, max
+			var min:Number = -100;
+			var max:Number = 100;
+
+			// check for "alpha" keyword in fieldName
+			if (fieldName.toLowerCase().indexOf("alpha") != -1)
+			{
+				min = 0;
+				max = 1.0;
+				step = 0.05;
+			}
+			else
+			{
+				if (value != 0)
+				{
+					min = value / 10.0;
+					max = value * 10.0;
+				}
+
+				if (min > max)
+				{
+					var temp:Number = max;
+					max = min;
+					min = max;
+				}
+
+				// guess best step from min/max
+				var step:Number = (max - min) / 100.0;
+			}
+
+			// override guessed values with metadata
+			if (metadataList)
+			{
+				for each (var metadata:XML in metadataList)
+				{
+					if (metadata.@name == INSPECTABLE_METADATA_NAME)
+					{
+						for each (var metadataArg:XML in metadata.arg)
+						{
+							switch (metadataArg.@key.toString())
+							{
+								case INSPECTABLE_METADATA_KEY_MIN:
+									min = Number(metadataArg.@value);
+								break;
+								case INSPECTABLE_METADATA_KEY_MAX:
+									max = Number(metadataArg.@value);
+								break;
+								case INSPECTABLE_METADATA_KEY_STEP:
+									step = Math.abs(Number(metadataArg.@value));
+								break;
+								default:
+									trace("Unsupported argument '" + metadataArg.@key + "' in '" + INSPECTABLE_METADATA_NAME + "' metadata for field '" + fieldName + "'.");
+								break;
+							}
+						}
+					}
+				}
+
+				// invert min / max if needed
+				if (min > max)
+				{
+					temp = max;
+					max = min;
+					min = max;
+				}
+			}
+
+			if (access == ACCESS_READ_ONLY)
+			{
+				addEntry(new SliderInspectorEntry(fieldName,
+					function():Number { return _object[fieldName]; },
+					null, min, max, step, false)
+				);
+			}
+			else if (access == ACCESS_READ_WRITE)
+			{
+				addEntry(new SliderInspectorEntry(fieldName,
+					function():Number { return _object[fieldName]; },
+					function(value:Number):void { _object[fieldName] = value; },
+					min, max, step, false)
+				);
+			}
+			else
+			{
+				trace("Unsupported access for field '"+ fieldName +"': " + access);
+			}
+		}
+
+		private function addIntEntry(fieldName:String, access:String):void
+		{
+			// guest min, max & step values
+			var value:int = _object[fieldName];
+			var min:int = -Math.abs(value) * 5.0;
+			var max:int = Math.abs(value) * 5.0;
+
+			if (value == 0)
+			{
+				min = -100;
+				max = 100;
+			}
+
+			var step:Number = Math.round((max - min) / 100.0);
+
+			if (access == ACCESS_READ_ONLY)
+			{
+				addEntry(new SliderInspectorEntry(fieldName,
+					function():int { return _object[fieldName]; },
+					null, min, max, step, false)
+				);
+			}
+			else if (access == ACCESS_READ_WRITE)
+			{
+				addEntry(new SliderInspectorEntry(fieldName,
+					function():int { return _object[fieldName]; },
+					function(value:int):void { _object[fieldName] = value; },
+					min, max, step, false)
+				);
+			}
+			else
+			{
+				trace("Unsupported access for field '"+ fieldName +"': " + access);
+			}
+		}
+
+		private function addUintEntry(fieldName:String, access:String):void
+		{
+			// check for "color" keyword in fieldName
+			if (fieldName.toLowerCase().indexOf("color") != -1)
+			{
+				addColorEntry(fieldName, access);
+				return;
+			}
+
+			// guest min, max & step values
+			var value:uint = _object[fieldName];
+			var min:uint = Math.round(value / 10.0);
+			var max:uint = value * 10.0;
+
+			if (value == 0)
+			{
+				min = 0;
+				max = 100;
+			}
+
+			var step:Number = Math.round((max - min) / 100.0);
+
+			if (access == ACCESS_READ_ONLY)
+			{
+				addEntry(new SliderInspectorEntry(fieldName,
+					function():uint { return _object[fieldName]; },
+					null, min, max, step, false)
+				);
+			}
+			else if (access == ACCESS_READ_WRITE)
+			{
+				addEntry(new SliderInspectorEntry(fieldName,
+					function():uint { return _object[fieldName]; },
+					function(value:uint):void { _object[fieldName] = value; },
+					min, max, step, false)
+				);
+			}
+			else
+			{
+				trace("Unsupported access for field '"+ fieldName +"': " + access);
+			}
+		}
+
+		private function addStringEntry(fieldName:String, access:String):void
+		{
+			// check for "blendMode" keyword in fieldName
+			if (fieldName.toLowerCase().indexOf("blendmode") != -1)
+			{
+				addBlendModeEntry(fieldName, access);
+				return;
+			}
+
+			if (access == ACCESS_READ_ONLY)
+			{
+				addEntry(new TextInputInspectorEntry(fieldName,
+					function():String { return _object[fieldName]; })
+				);
+			}
+			else if (access == ACCESS_READ_WRITE)
+			{
+				addEntry(new TextInputInspectorEntry(fieldName,
+					function():String { return _object[fieldName]; },
+					function(value:String):void { _object[fieldName] = value; })
+				);
+			}
+			else
+			{
+				trace("Unsupported access for field '"+ fieldName +"': " + access);
+			}
+		}
+
+		private function addBlendModeEntry(fieldName:String, access:String):void
+		{
+			if (access == ACCESS_READ_ONLY)
+			{
+				addEntry(new BlendModeInspectorEntry(fieldName,
+					function():String { return _object[fieldName]; })
+				);
+			}
+			else if (access == ACCESS_READ_WRITE)
+			{
+				addEntry(new BlendModeInspectorEntry(fieldName,
+					function():String { return _object[fieldName]; },
+					function(value:String):void { _object[fieldName] = value; })
+				);
+			}
+			else
+			{
+				trace("Unsupported access for field '"+ fieldName +"': " + access);
+			}
+		}
+
+		private function addTextureEntry(fieldName:String, access:String):void
+		{
+			if (access == ACCESS_READ_ONLY)
+			{
+				addEntry(new TextureInspectorEntry(fieldName, null,
+					function():Texture { return _object[fieldName]; },
+					null,
+					false)
+				);
+			}
+			else if (access == ACCESS_READ_WRITE)
+			{
+				addEntry(new TextureInspectorEntry(fieldName, null,
+					function():Texture { return _object[fieldName]; },
+					function(value:Texture):void { _object[fieldName] = value; },
+					false)
+				);
+			}
+			else
+			{
+				trace("Unsupported access for field '"+ fieldName +"': " + access);
+			}
+		}
+
+		private function addObjectReferenceEntry(fieldName:String, access:String):void
+		{
+			addEntry(new ObjectReferenceInspectorEntry(fieldName,
+				function():Object { return _object[fieldName]; },
+				function():void
+				{
+					if (_object[fieldName] != null)
+						ObjectInspectorPanel.instance.inspect(_object[fieldName], false, true);
+				})
+			);
+		}
+
+		private function addColorEntry(fieldName:String, access:String):void
+		{
+			if (access == ACCESS_READ_ONLY)
+			{
+				addEntry(new ColorInspectorEntry(fieldName,
+					function():uint { return _object[fieldName]; },
+					null)
+				);
+			}
+			else if (access == ACCESS_READ_WRITE)
+			{
+				addEntry(new ColorInspectorEntry(fieldName,
+					function():uint { return _object[fieldName]; },
+					function(value:uint):void { _object[fieldName] = value; })
+				);
+			}
+			else
+			{
+				trace("Unsupported access for field '"+ fieldName +"': " + access);
+			}
+		}
+
+		//----------------------------------------------------------------------
+		//-- Events handlers
+		//----------------------------------------------------------------------
+
+		override protected function onAddedToStage(e:Event):void
+		{
+			super.onAddedToStage(e);
+
+			Starling.juggler.add(this);
+
+			_backButton.addEventListener(Event.TRIGGERED, onBackButtonTriggered);
+		}
+
+		override protected function onRemovedFromStage(e:Event):void
+		{
+			super.onRemovedFromStage(e);
+
+			Starling.juggler.remove(this);
+
+			_backButton.removeEventListener(Event.TRIGGERED, onBackButtonTriggered);
+		}
+
+		private function onBackButtonTriggered(event:Event):void
+		{
+			if (_objectStack.length > 0)
+			{
+				inspect(_objectStack.pop(), false, false);
+				refreshBackButton();
+			}
+		}
+
+		//----------------------------------------------------------------------
+		//-- Inspection overlay for Display Object
+		//----------------------------------------------------------------------
+
+		private function updateInspectionOverlay():void
+		{
+			if (!_object)
+				return;
+
+			if (!(_object is DisplayObject))
+				return;
+
+			// instantiate bounds indicator
+			if (!_boundsIndicator)
+			{
+				_boundsIndicator = new BorderedRectangle(1, 1,
+				                                         InspectorConfiguration.INSPECTED_OBJECT_BOUNDS_COLOR,
+				                                         InspectorConfiguration.INSPECTED_OBJECT_BOUNDS_BORDER_SIZE,
+				                                         InspectorConfiguration.INSPECTED_OBJECT_BOUNDS_COLOR);
+				_boundsIndicator.touchable = false;
+				_boundsIndicator.bodyAlpha = 0.1;
+				_boundsIndicator.borderAlpha = 0.5;
+			}
+
+			// find the bounds in the root layer space
+			var displayObject:DisplayObject = _object as DisplayObject;
+			displayObject.getBounds(InspectorConfiguration.ROOT_LAYER, _objectBounds);
+			_boundsIndicator.x = _objectBounds.x;
+			_boundsIndicator.y = _objectBounds.y;
+			_boundsIndicator.width = _objectBounds.width;
+			_boundsIndicator.height = _objectBounds.height;
+
+			// add the bound indicator in the root layer
+			InspectorConfiguration.ROOT_LAYER.addChild(_boundsIndicator);
+		}
+
+		public function advanceTime(time:Number):void
+		{
+			if (!_object)
+				return;
+
+			if (!(_object is DisplayObject))
+				return;
+
+			updateInspectionOverlay();
+		}
+	}
+}

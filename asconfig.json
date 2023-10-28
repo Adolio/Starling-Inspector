@@ -1,0 +1,17 @@
+{
+	"type": "lib",
+	"config": "air",
+	"compilerOptions": {
+		"source-path": [
+			"src"
+		],
+		"swf-version": 50,
+		"external-library-path": [
+			"libs"
+		],
+		"include-sources": [
+			"src"
+		],
+		"output": "bin/starling-inspector.swc"
+	}
+}

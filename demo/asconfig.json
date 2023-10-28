@@ -1,0 +1,45 @@
+{
+	"config": "air",
+	"compilerOptions": {
+		"output": "bin/Starling-Inspector-Demo.swf",
+		"library-path": [
+			"libs/starling.swc",
+			"libs/feathers.swc",
+			"libs/AeonDesktopTheme.swc",
+			"libs/MinimalDesktopTheme.swc",
+			"libs/MetalWorksDesktopTheme.swc",
+			"../libs/as3-signals.swc"
+		],
+		"source-path": [
+			"src",
+			"../src/",
+			"media"
+		],
+		"default-size": {
+			"width": 1280,
+			"height": 720
+		}
+	},
+	"application": "application.xml",
+	"files": [
+		"src/ch/adolio/Main.as"
+	],
+	"airOptions": {
+		"windows": {
+			"target": "native",
+			"output": "bin/Starling-Inspector-Demo.exe",
+			"signingOptions": {
+				"storetype": "pkcs12",
+				"keystore": "cert/starling-inspector-demo.p12"
+			}
+		},
+		"air":
+		{
+			"output": "bin/Starling-Inspector.air",
+			"signingOptions": {
+				"storetype": "pkcs12",
+				"keystore": "cert/starling-inspector-demo.p12"
+			}
+		}
+	}
+}
