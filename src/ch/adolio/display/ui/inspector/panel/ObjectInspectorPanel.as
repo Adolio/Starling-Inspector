@@ -86,9 +86,10 @@ package ch.adolio.display.ui.inspector.panel
 
 			_backButton = new Button();
 			_backButton.styleName = InspectorConfiguration.STYLE_NAME_PANEL_BACK_BUTTON;
-			_backButton.height = _headerBackground.height;
+			_backButton.height = _footer.height;
 			_backButton.label = "Back";
 			_backButton.visible = false;
+			_backButton.maxHeight = _footer.height;
 			_footer.addChild(_backButton);
 		}
 
