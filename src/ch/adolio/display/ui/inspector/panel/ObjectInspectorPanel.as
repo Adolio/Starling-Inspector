@@ -29,6 +29,8 @@ package ch.adolio.display.ui.inspector.panel
 	import starling.events.Event;
 	import starling.filters.FilterChain;
 	import starling.textures.Texture;
+	import starling.utils.deg2rad;
+	import starling.utils.rad2deg;
 
 	/**
 	 * Inspector panel for any Object.
@@ -298,6 +300,12 @@ package ch.adolio.display.ui.inspector.panel
 				max = 1.0;
 				step = 0.05;
 			}
+			// check for "rotation" and "angle" fields
+			else if (fieldName == "rotation" || fieldName == "angle")
+			{
+				addRotationEntry(fieldName, access); // TODO add support for metadata
+				return;
+			}
 			else
 			{
 				if (value != 0)
@@ -367,6 +375,30 @@ package ch.adolio.display.ui.inspector.panel
 					function():Number { return _object[fieldName]; },
 					function(value:Number):void { _object[fieldName] = value; },
 					min, max, step, false)
+				);
+			}
+			else
+			{
+				trace("Unsupported access for field '"+ fieldName +"': " + access);
+			}
+		}
+
+		/** Add a rotation / angle entry. Unit will be presented in degrees but treated in radians. */
+		private function addRotationEntry(fieldName:String, access:String):void
+		{
+			if (access == ACCESS_READ_ONLY)
+			{
+				addEntry(new SliderInspectorEntry(fieldName,
+					function():Number { return rad2deg(_object[fieldName]); },
+					null, -180, 180, 5.0, false)
+				);
+			}
+			else if (access == ACCESS_READ_WRITE)
+			{
+				addEntry(new SliderInspectorEntry(fieldName,
+					function():Number { return rad2deg(_object[fieldName]); },
+					function(value:Number):void { _object[fieldName] = deg2rad(value); },
+					-180, 180, 5.0, false)
 				);
 			}
 			else
