@@ -41,7 +41,7 @@ package ch.adolio.display.ui.inspector.panel
 
 		public function ColorSelectorPanel()
 		{
-			super(true, true);
+			super(true, true, false);
 
 			// setup title
 			title = "Color Selector";

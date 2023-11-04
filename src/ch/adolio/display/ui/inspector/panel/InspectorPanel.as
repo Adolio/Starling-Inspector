@@ -44,6 +44,7 @@ package ch.adolio.display.ui.inspector.panel
 		protected var _headerBackground:Quad;
 		protected var _titleLabel:Label;
 		protected var _closeButton:Button;
+		protected var _refreshButton:Button;
 
 		// body
 		protected var _bodyContainer:Sprite;
@@ -67,7 +68,7 @@ package ch.adolio.display.ui.inspector.panel
 		// screen
 		private static var screenBounds:Rectangle = new Rectangle();
 
-		public function InspectorPanel(isClosable:Boolean = true, isResizeable:Boolean = true)
+		public function InspectorPanel(isClosable:Boolean = true, isResizeable:Boolean = true, isRefreshable:Boolean = true)
 		{
 			_isResizeable = isResizeable;
 
@@ -87,6 +88,16 @@ package ch.adolio.display.ui.inspector.panel
 			_header.addChild(_headerBackground);
 
 			_header.addChild(_titleLabel);
+
+			_refreshButton = new Button();
+			_refreshButton.styleName = InspectorConfiguration.STYLE_NAME_PANEL_BACK_BUTTON;
+			_refreshButton.height = _header.height;
+			_refreshButton.label = "Refresh";
+			_refreshButton.maxHeight = _header.height;
+			_refreshButton.visible = isRefreshable;
+			_refreshButton.validate();
+			_header.addChild(_refreshButton);
+
 			_closeButton = new Button();
 			_closeButton.styleName = InspectorConfiguration.STYLE_NAME_PANEL_CLOSE_BUTTON;
 			_closeButton.height = _headerBackground.height;
@@ -202,11 +213,13 @@ package ch.adolio.display.ui.inspector.panel
 			// invalidate components
 			_titleLabel.invalidate();
 			_closeButton.invalidate();
+			_refreshButton.invalidate();
 
 			// register to events
 			_headerBackground.addEventListener(TouchEvent.TOUCH, onHeaderTouched);
 			_footerBackground.addEventListener(TouchEvent.TOUCH, onHeaderTouched);
 			_closeButton.addEventListener(Event.TRIGGERED, onCloseButtonTriggered);
+			_refreshButton.addEventListener(Event.TRIGGERED, onRefreshButtonTriggered);
 
 			if (_sizeGrabber)
 				_sizeGrabber.addEventListener(TouchEvent.TOUCH, onBottomSideTouched);
@@ -221,6 +234,7 @@ package ch.adolio.display.ui.inspector.panel
 			_headerBackground.removeEventListener(TouchEvent.TOUCH, onHeaderTouched);
 			_footerBackground.removeEventListener(TouchEvent.TOUCH, onHeaderTouched);
 			_closeButton.removeEventListener(Event.TRIGGERED, onCloseButtonTriggered);
+			_refreshButton.removeEventListener(Event.TRIGGERED, onRefreshButtonTriggered);
 
 			if (_sizeGrabber)
 				_sizeGrabber.removeEventListener(TouchEvent.TOUCH, onBottomSideTouched);
@@ -294,6 +308,11 @@ package ch.adolio.display.ui.inspector.panel
 			close();
 		}
 
+		protected function onRefreshButtonTriggered(event:Event):void
+		{
+			updateEntries();
+		}
+
 		//---------------------------------------------------------------------
 		//-- Entries management
 		//---------------------------------------------------------------------
@@ -313,6 +332,7 @@ package ch.adolio.display.ui.inspector.panel
 			_body.removeEntries(dispose);
 		}
 
+		/** Refreshes all entries from values. */
 		public function updateEntries():void
 		{
 			for each (var entry:DisplayObject in _body.entries)
@@ -388,7 +408,8 @@ package ch.adolio.display.ui.inspector.panel
 			// update components
 			_preferredWidth = value;
 			_closeButton.x = value - _closeButton.width;
-			_titleLabel.width = value - _closeButton.width;
+			_refreshButton.x = _closeButton.x - _refreshButton.width;
+			_titleLabel.width = value - _closeButton.width - _refreshButton.width;
 			_headerBackground.width = value;
 			_footerBackground.width = value;
 

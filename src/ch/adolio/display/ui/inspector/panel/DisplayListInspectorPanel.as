@@ -11,7 +11,6 @@
 package ch.adolio.display.ui.inspector.panel
 {
 	import ch.adolio.utils.InspectionUtils;
-	import feathers.controls.Button;
 	import feathers.controls.Tree;
 	import feathers.controls.renderers.DefaultTreeItemRenderer;
 	import feathers.controls.renderers.ITreeItemRenderer;
@@ -29,7 +28,6 @@ package ch.adolio.display.ui.inspector.panel
 		protected var _root:DisplayObjectContainer;
 		protected var _includeRoot:Boolean;
 		protected var _tree:Tree;
-		protected var _refreshButton:Button;
 
 		// state
 		protected var _isInitialized:Boolean;
@@ -45,11 +43,6 @@ package ch.adolio.display.ui.inspector.panel
 			_includeRoot = includeRoot;
 
 			title = "Display List Explorer";
-
-			// refresh button
-			_refreshButton = new Button();
-			_refreshButton.label = "Refresh";
-			addEntry(_refreshButton);
 
 			// display list tree
 			_tree = new Tree();
@@ -142,7 +135,6 @@ package ch.adolio.display.ui.inspector.panel
 			super.onAddedToStage(e);
 
 			// register to events
-			_refreshButton.addEventListener(Event.TRIGGERED, onRefreshButtonTriggered);
 			_tree.addEventListener(Event.CHANGE, onSelectedItemChanged);
 		}
 
@@ -151,7 +143,6 @@ package ch.adolio.display.ui.inspector.panel
 			super.onRemovedFromStage(e);
 
 			// unregister from events
-			_refreshButton.removeEventListener(Event.TRIGGERED, onRefreshButtonTriggered);
 			_tree.removeEventListener(Event.CHANGE, onSelectedItemChanged);
 		}
 
@@ -214,8 +205,10 @@ package ch.adolio.display.ui.inspector.panel
 			return null;
 		}
 
-		private function onRefreshButtonTriggered(event:Event):void
+		override public function updateEntries():void
 		{
+			super.updateEntries();
+
 			refreshTree();
 		}
 

@@ -35,6 +35,8 @@ package ch.adolio.display.ui.inspector.panel
 
 		public function SliderConfigPanel(min:Number, max:Number, step:Number)
 		{
+			super(true, true, false);
+
 			_min = min;
 			_max = max;
 			_step = step;
