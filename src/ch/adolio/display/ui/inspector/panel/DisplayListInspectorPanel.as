@@ -151,16 +151,19 @@ package ch.adolio.display.ui.inspector.panel
 			var item:Object = findItemOfObject(object);
 			if (item)
 			{
+				// select item & force to open all parents
 				_tree.selectedItem = item;
+				openItemParentsRecursively(item);
+				_tree.invalidate(); // enforce refreshing the size of the tree
+			}
+		}
 
-				// make sure the parent branch is open
-				if (item.parent != null && !_tree.isBranchOpen(item.parent))
-				{
-					_tree.toggleBranch(item.parent, true);
-
-					// enforce refreshing the size of the tree
-					_tree.invalidate();
-				}
+		public function openItemParentsRecursively(item:Object):void
+		{
+			if (item.parent != null)
+			{
+				_tree.toggleBranch(item.parent, true);
+				openItemParentsRecursively(item.parent);
 			}
 		}
 
