@@ -583,6 +583,13 @@ package ch.adolio.display.ui.inspector.panel
 			if (!(_object is DisplayObject))
 				return;
 
+			// find the bounds in the root layer space
+			var displayObject:DisplayObject = _object as DisplayObject;
+
+			// handle display object not added to the stage
+			if (!displayObject.stage)
+				return;
+
 			// instantiate bounds indicator
 			if (!_boundsIndicator)
 			{
@@ -595,8 +602,6 @@ package ch.adolio.display.ui.inspector.panel
 				_boundsIndicator.borderAlpha = 0.5;
 			}
 
-			// find the bounds in the root layer space
-			var displayObject:DisplayObject = _object as DisplayObject;
 			displayObject.getBounds(InspectorConfiguration.ROOT_LAYER, _objectBounds);
 			_boundsIndicator.x = _objectBounds.x;
 			_boundsIndicator.y = _objectBounds.y;
