@@ -155,6 +155,7 @@ package ch.adolio.display.ui.inspector.panel
 
 			// reset stack
 			refreshBackButton();
+			body.sortEntriesAlphabetically();
 		}
 
 		override public function close():void

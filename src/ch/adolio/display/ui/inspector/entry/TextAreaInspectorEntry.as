@@ -26,6 +26,7 @@ package ch.adolio.display.ui.inspector.entry
 
 		public function TextAreaInspectorEntry(title:String, textAreaHeight:Number, getterFunc:Function, setterFunc:Function = null)
 		{
+			_title = title;
 			_getterFunc = getterFunc;
 			_setterFunc = setterFunc;
 

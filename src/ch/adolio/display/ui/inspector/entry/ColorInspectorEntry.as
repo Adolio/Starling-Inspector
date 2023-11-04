@@ -37,6 +37,7 @@ package ch.adolio.display.ui.inspector.entry
 
 		public function ColorInspectorEntry(title:String, getterFunc:Function, setterFunc:Function = null)
 		{
+			_title = title;
 			_getterFunc = getterFunc;
 			_setterFunc = setterFunc;
 

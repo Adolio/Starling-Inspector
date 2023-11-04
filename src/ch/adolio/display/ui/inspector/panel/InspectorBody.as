@@ -85,6 +85,25 @@ package ch.adolio.display.ui.inspector.panel
 			return _entries;
 		}
 
+		public function sortEntriesAlphabetically():void
+		{
+			_entriesContainer.sortChildren(entriesSorting);
+		}
+
+		public function entriesSorting(a:DisplayObject, b:DisplayObject):Number
+		{
+			var aName:String = a.name;
+			var bName:String = b.name;
+
+			if (a is InspectorEntry)
+				aName = (a as InspectorEntry).title;
+
+			if (b is InspectorEntry)
+				bName = (b as InspectorEntry).title;
+
+			return aName > bName ? 1.0 : -1.0;
+		}
+
 		//---------------------------------------------------------------------
 		//-- Event handlers
 		//---------------------------------------------------------------------

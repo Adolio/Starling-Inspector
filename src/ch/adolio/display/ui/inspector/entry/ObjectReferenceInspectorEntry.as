@@ -26,6 +26,7 @@ package ch.adolio.display.ui.inspector.entry
 
 		public function ObjectReferenceInspectorEntry(title:String, getterFunc:Function, inspectRequestFunc:Function = null)
 		{
+			_title = title;
 			_getterFunc = getterFunc;
 			_inspectRequestFunc = inspectRequestFunc;
 

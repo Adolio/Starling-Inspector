@@ -36,6 +36,7 @@ package ch.adolio.display.ui.inspector.entry
 
 		public function TextureInspectorEntry(title:String, assetManager:AssetManager, getterFunc:Function, setterFunc:Function, forcePotTexture:Boolean = false)
 		{
+			_title = title;
 			_assetManager = assetManager;
 			_getterFunc = getterFunc;
 			_setterFunc = setterFunc;

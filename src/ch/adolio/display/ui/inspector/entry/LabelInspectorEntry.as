@@ -23,6 +23,7 @@ package ch.adolio.display.ui.inspector.entry
 
 		public function LabelInspectorEntry(title:String, getterFunc:Function)
 		{
+			_title = title;
 			_getterFunc = getterFunc;
 
 			_titleLabel = new Label();

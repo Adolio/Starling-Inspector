@@ -36,6 +36,7 @@ package ch.adolio.display.ui.inspector.entry
 		 */
 		public function PickerListInspectorEntry(title:String, items:Array, getterFunc:Function, setterFunc:Function = null)
 		{
+			_title = title;
 			_items = items;
 			_getterFunc = getterFunc;
 			_setterFunc = setterFunc;

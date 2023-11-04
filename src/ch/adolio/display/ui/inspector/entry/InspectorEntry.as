@@ -18,6 +18,7 @@ package ch.adolio.display.ui.inspector.entry
 	public class InspectorEntry extends Sprite
 	{
 		protected var _inspector:InspectorPanel;
+		protected var _title:String;
 
 		protected var _preferredWidth:Number = 300;
 		protected var _preferredHeight:Number = InspectorConfiguration.ENTRY_PREFERRED_HEIGHT;
@@ -39,6 +40,16 @@ package ch.adolio.display.ui.inspector.entry
 		public function set inspector(value:InspectorPanel):void
 		{
 			_inspector = value;
+		}
+
+		public function get title():String
+		{
+			return _title;
+		}
+
+		public function set title(value:String):void
+		{
+			_title = value;
 		}
 
 		//---------------------------------------------------------------------

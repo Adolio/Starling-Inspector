@@ -50,6 +50,7 @@ package ch.adolio.display.ui.inspector.entry
 		                                     showConfigButton:Boolean = false,
 		                                     numberPrecision:int = -1)
 		{
+			_title = title;
 			_getterFunc = getterFunc;
 			_setteFunc = setterFunc;
 
