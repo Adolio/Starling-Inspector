@@ -27,6 +27,7 @@ package ch.adolio.display.ui.inspector.panel
 	import starling.core.Starling;
 	import starling.display.DisplayObject;
 	import starling.events.Event;
+	import starling.filters.FilterChain;
 	import starling.textures.Texture;
 
 	/**
@@ -179,6 +180,32 @@ package ch.adolio.display.ui.inspector.panel
 			// dispoes all entries
 			_body.removeEntries(true);
 
+			if (_object is FilterChain)
+				createFilterChainEntries();
+			else
+				createEntriesFromClassDescription();
+
+			// setup size at the first inspection
+			if (_hasSizeBeenSetup)
+			{
+				setupHeightFromContent();
+				_hasSizeBeenSetup = true;
+			}
+		}
+
+		private function createFilterChainEntries():void
+		{
+			// create entries from class description
+			createEntriesFromClassDescription();
+
+			// add each filter as an inspector entry to allow inspection
+			var filterChain:FilterChain = _object as FilterChain;
+			for (var i:int = 0; i < filterChain.numFilters; i++)
+				addObjectReferenceEntryFromObject("filter [" + i + "]", filterChain.getFilterAt(i));
+		}
+
+		private function createEntriesFromClassDescription():void
+		{
 			// variable (for static objects)
 			var description:XML = describeType(_object);
 			//Log.debug("Description: " + description + "");
@@ -230,13 +257,6 @@ package ch.adolio.display.ui.inspector.panel
 					addTextureEntry(name, access);
 				else
 					addObjectReferenceEntry(name, access);
-			}
-
-			// setup size at the first inspection
-			if (_hasSizeBeenSetup)
-			{
-				setupHeightFromContent();
-				_hasSizeBeenSetup = true;
 			}
 		}
 
@@ -514,6 +534,18 @@ package ch.adolio.display.ui.inspector.panel
 				{
 					if (_object[fieldName] != null)
 						ObjectInspectorPanel.instance.inspect(_object[fieldName], false, true);
+				})
+			);
+		}
+
+		private function addObjectReferenceEntryFromObject(title:String, object:Object):void
+		{
+			addEntry(new ObjectReferenceInspectorEntry(title,
+				function():Object { return object; },
+				function():void
+				{
+					if (object != null)
+						ObjectInspectorPanel.instance.inspect(object, false, true);
 				})
 			);
 		}

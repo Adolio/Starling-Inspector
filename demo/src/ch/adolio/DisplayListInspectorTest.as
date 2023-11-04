@@ -21,6 +21,8 @@ package ch.adolio
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
+	import starling.filters.FilterChain;
+	import starling.filters.GlowFilter;
 	import starling.text.TextField;
 	import starling.textures.Texture;
 
@@ -80,6 +82,12 @@ package ch.adolio
 			_bird.x = 500;
 			_bird.y = 200;
 			_scene.addChild(_bird);
+
+			// add sticker style filter
+			var filterChain:FilterChain = new FilterChain();
+			filterChain.addFilter(new GlowFilter(0xffffff, 10.0, 1.0, 1.0));
+			filterChain.addFilter(new GlowFilter(0x000000, 1.0, 1.0, 1.0));
+			_bird.filter = filterChain;
 		}
 
 		private function setupInspection():void
