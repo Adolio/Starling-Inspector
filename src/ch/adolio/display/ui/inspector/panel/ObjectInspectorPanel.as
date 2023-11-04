@@ -19,6 +19,7 @@ package ch.adolio.display.ui.inspector.panel
 	import ch.adolio.display.ui.inspector.entry.SliderInspectorEntry;
 	import ch.adolio.display.ui.inspector.entry.TextInputInspectorEntry;
 	import ch.adolio.display.ui.inspector.entry.TextureInspectorEntry;
+	import ch.adolio.display.ui.inspector.entry.TextureSmoothingInspectorEntry;
 	import ch.adolio.utils.InspectionUtils;
 	import feathers.controls.Button;
 	import flash.geom.Rectangle;
@@ -489,9 +490,16 @@ package ch.adolio.display.ui.inspector.panel
 		private function addStringEntry(fieldName:String, access:String):void
 		{
 			// check for "blendMode" keyword in fieldName
-			if (fieldName.toLowerCase().indexOf("blendmode") != -1)
+			if (fieldName.indexOf("blendMode") != -1)
 			{
 				addBlendModeEntry(fieldName, access);
+				return;
+			}
+
+			// check for "textureSmoothing" keyword in fieldName
+			if (fieldName.indexOf("textureSmoothing") != -1)
+			{
+				addTextureSmoothingEntry(fieldName, access);
 				return;
 			}
 
@@ -525,6 +533,27 @@ package ch.adolio.display.ui.inspector.panel
 			else if (access == ACCESS_READ_WRITE)
 			{
 				addEntry(new BlendModeInspectorEntry(fieldName,
+					function():String { return _object[fieldName]; },
+					function(value:String):void { _object[fieldName] = value; })
+				);
+			}
+			else
+			{
+				trace("Unsupported access for field '"+ fieldName +"': " + access);
+			}
+		}
+
+		private function addTextureSmoothingEntry(fieldName:String, access:String):void
+		{
+			if (access == ACCESS_READ_ONLY)
+			{
+				addEntry(new TextureSmoothingInspectorEntry(fieldName,
+					function():String { return _object[fieldName]; })
+				);
+			}
+			else if (access == ACCESS_READ_WRITE)
+			{
+				addEntry(new TextureSmoothingInspectorEntry(fieldName,
 					function():String { return _object[fieldName]; },
 					function(value:String):void { _object[fieldName] = value; })
 				);
