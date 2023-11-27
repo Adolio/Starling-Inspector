@@ -22,12 +22,15 @@ package ch.adolio.display.ui.inspector.entry
 
 	public class SliderInspectorEntry extends InspectorEntry
 	{
+		private var _value:Number;
 		private var _label:Label;
 		private var _slider:Slider;
 		private var _valueTextInput:TextInput;
 		private var _getterFunc:Function;
 		private var _setteFunc:Function;
 		private var _isValueClampingEnabled:Boolean = true;
+		private var _doUpdateValueOnTextInputValueChanged:Boolean = false;
+		private var _doUpdateValueOnTextInputFocusOut:Boolean = true;
 
 		private var _disableSliderChangeEventReaction:Boolean;
 		private var _disableTextInputChangeEventReaction:Boolean;
@@ -67,6 +70,8 @@ package ch.adolio.display.ui.inspector.entry
 			_label.height = _preferredHeight;
 			addChild(_label);
 
+			_value = _getterFunc();
+
 			_slider = new Slider();
 			_slider.styleName = InspectorConfiguration.STYLE_NAME_SLIDER;
 			_slider.minimum = min;
@@ -74,7 +79,7 @@ package ch.adolio.display.ui.inspector.entry
 			_slider.step = step;
 			_slider.height = _preferredHeight;
 			_slider.minWidth = 0;
-			_slider.value = _getterFunc();
+			_slider.value = _value;
 			addChild(_slider);
 			_slider.validate();
 
@@ -106,6 +111,8 @@ package ch.adolio.display.ui.inspector.entry
 
 		public function setValue(value:Number, disableCallback:Boolean = true):void
 		{
+			_value = value;
+
 			_disableSliderChangeEventReaction = disableCallback;
 			_slider.value = value;
 			_disableSliderChangeEventReaction = false;
@@ -117,7 +124,7 @@ package ch.adolio.display.ui.inspector.entry
 
 		public function getValue():Number
 		{
-			return _slider.value;
+			return _value;
 		}
 
 		public function get isValueClampingEnabled():Boolean
@@ -164,6 +171,25 @@ package ch.adolio.display.ui.inspector.entry
 		{
 			var pow:Number = Math.pow(10, precision);
 			return (Math.round(value * pow) / pow).toString();
+		}
+
+		private function updateValueFromTextInput():void
+		{
+			// get value from text input
+			_value = Number(_valueTextInput.text);
+
+			// clamp value (if enabled)
+			if (_isValueClampingEnabled)
+				_value = InspectionUtils.clamp(_value, _slider.minimum, _slider.maximum);
+
+			// update slider component silently
+			_disableSliderChangeEventReaction = true;
+			_slider.value = _value;
+			_disableSliderChangeEventReaction = false;
+
+			// call callback
+			if (_setteFunc)
+				_setteFunc(_value);
 		}
 
 		//---------------------------------------------------------------------
@@ -279,12 +305,13 @@ package ch.adolio.display.ui.inspector.entry
 			if (_disableSliderChangeEventReaction)
 				return;
 
+			_value = _slider.value;
 			_disableTextInputChangeEventReaction = true;
 			_valueTextInput.text = formatNumber(_slider.value, _numberPrecision);
 			_disableTextInputChangeEventReaction = false;
 
 			if (_setteFunc)
-				_setteFunc(_slider.value);
+				_setteFunc(_value);
 		}
 
 		private function onTextInputValueChanged(e:Event):void
@@ -292,21 +319,9 @@ package ch.adolio.display.ui.inspector.entry
 			if (_disableTextInputChangeEventReaction)
 				return;
 
-			// get value from text input
-			var value:Number = Number(_valueTextInput.text);
-
-			// clamp value (if enabled)
-			if (_isValueClampingEnabled)
-				value = InspectionUtils.clamp(value, _slider.minimum, _slider.maximum);
-
-			// update slider component silently
-			_disableSliderChangeEventReaction = true;
-			_slider.value = value;
-			_disableSliderChangeEventReaction = false;
-
-			// call callback
-			if (_setteFunc)
-				_setteFunc(value);
+			// update value
+			if (_doUpdateValueOnTextInputValueChanged)
+				updateValueFromTextInput();
 		}
 
 		private function onValueTextInputFocusedIn(e:Event):void
@@ -317,13 +332,9 @@ package ch.adolio.display.ui.inspector.entry
 
 		private function onValueTextInputFocusedOut(e:Event):void
 		{
-			// synchronize text with slider value
-			if (_isValueClampingEnabled)
-			{
-				_disableTextInputChangeEventReaction = true;
-				_valueTextInput.text = formatNumber(_slider.value, _numberPrecision);
-				_disableTextInputChangeEventReaction = false;
-			}
+			// update value
+			if (_doUpdateValueOnTextInputFocusOut)
+				updateValueFromTextInput();
 		}
 
 		public function get slider():Slider
