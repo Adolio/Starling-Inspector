@@ -66,6 +66,7 @@ package ch.adolio.display.ui.inspector.panel
 		// access
 		private const ACCESS_READ_ONLY:String = "readonly";
 		private const ACCESS_READ_WRITE:String = "readwrite";
+		private const ACCESS_WRITE_ONLY:String = "writeonly";
 
 		// metadata
 		private const INSPECTABLE_METADATA_NAME:String = "Inspectable";
@@ -246,6 +247,13 @@ package ch.adolio.display.ui.inspector.panel
 				name = accessor.@name;
 				type = accessor.@type;
 				access = accessor.@access;
+
+				// "write only" access is not supported
+				if (access == ACCESS_WRITE_ONLY)
+				{
+					trace("Unsupported access for field '"+ name +"': " + access);
+					continue;
+				}
 
 				if (type == TYPE_BOOLEAN)
 					addBooleanEntry(name, access);
