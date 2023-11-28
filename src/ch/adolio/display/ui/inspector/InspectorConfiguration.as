@@ -46,7 +46,10 @@ package ch.adolio.display.ui.inspector
 		public static var COLOR_BACKGROUND_HIGHLIGHT:uint = 0xBAD1DF;
 
 		// inspection overlay
-		public static var INSPECTED_OBJECT_BOUNDS_COLOR:uint = 0x0000ff;
+		public static var INSPECTED_OBJECT_BOUNDS_BODY_COLOR:Number = 0x0000ff;
+		public static var INSPECTED_OBJECT_BOUNDS_BODY_ALPHA:Number = 0.1;
+		public static var INSPECTED_OBJECT_BOUNDS_BORDER_COLOR:uint = 0x0000ff;
+		public static var INSPECTED_OBJECT_BOUNDS_BORDER_ALPHA:Number = 0.5;
 		public static var INSPECTED_OBJECT_BOUNDS_BORDER_SIZE:Number = 0.6;
 
 		// inspection panel

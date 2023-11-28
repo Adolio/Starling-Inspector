@@ -696,12 +696,12 @@ package ch.adolio.display.ui.inspector.panel
 			if (!_boundsIndicator)
 			{
 				_boundsIndicator = new BorderedRectangle(1, 1,
-				                                         InspectorConfiguration.INSPECTED_OBJECT_BOUNDS_COLOR,
+				                                         InspectorConfiguration.INSPECTED_OBJECT_BOUNDS_BODY_COLOR,
 				                                         InspectorConfiguration.INSPECTED_OBJECT_BOUNDS_BORDER_SIZE,
-				                                         InspectorConfiguration.INSPECTED_OBJECT_BOUNDS_COLOR);
+				                                         InspectorConfiguration.INSPECTED_OBJECT_BOUNDS_BORDER_COLOR);
 				_boundsIndicator.touchable = false;
-				_boundsIndicator.bodyAlpha = 0.1;
-				_boundsIndicator.borderAlpha = 0.5;
+				_boundsIndicator.bodyAlpha = InspectorConfiguration.INSPECTED_OBJECT_BOUNDS_BODY_ALPHA;
+				_boundsIndicator.borderAlpha = InspectorConfiguration.INSPECTED_OBJECT_BOUNDS_BORDER_ALPHA;
 			}
 
 			displayObject.getBounds(InspectorConfiguration.ROOT_LAYER, _objectBounds);
