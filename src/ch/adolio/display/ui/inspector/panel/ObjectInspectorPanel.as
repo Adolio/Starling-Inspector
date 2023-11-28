@@ -704,11 +704,19 @@ package ch.adolio.display.ui.inspector.panel
 				_boundsIndicator.borderAlpha = InspectorConfiguration.INSPECTED_OBJECT_BOUNDS_BORDER_ALPHA;
 			}
 
-			displayObject.getBounds(InspectorConfiguration.ROOT_LAYER, _objectBounds);
-			_boundsIndicator.x = _objectBounds.x;
-			_boundsIndicator.y = _objectBounds.y;
-			_boundsIndicator.width = _objectBounds.width;
-			_boundsIndicator.height = _objectBounds.height;
+			try
+			{
+				displayObject.getBounds(InspectorConfiguration.ROOT_LAYER, _objectBounds);
+				_boundsIndicator.x = _objectBounds.x;
+				_boundsIndicator.y = _objectBounds.y;
+				_boundsIndicator.width = _objectBounds.width;
+				_boundsIndicator.height = _objectBounds.height;
+			}
+			catch (error:Error)
+			{
+				trace("Failed to setup the inspection overlay.");
+				return;
+			}
 
 			// add the bound indicator in the root layer
 			InspectorConfiguration.ROOT_LAYER.addChild(_boundsIndicator);
