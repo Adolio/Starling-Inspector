@@ -12,6 +12,7 @@ package ch.adolio.display.ui.inspector.panel
 {
 	import ch.adolio.display.shape.BorderedRectangle;
 	import ch.adolio.display.ui.inspector.InspectorConfiguration;
+	import ch.adolio.display.ui.inspector.entry.ActionInspectorEntry;
 	import ch.adolio.display.ui.inspector.entry.BlendModeInspectorEntry;
 	import ch.adolio.display.ui.inspector.entry.CheckInspectorEntry;
 	import ch.adolio.display.ui.inspector.entry.ColorInspectorEntry;
@@ -73,6 +74,9 @@ package ch.adolio.display.ui.inspector.panel
 		private const INSPECTABLE_METADATA_KEY_MIN:String = "min";
 		private const INSPECTABLE_METADATA_KEY_MAX:String = "max";
 		private const INSPECTABLE_METADATA_KEY_STEP:String = "step";
+
+		// methods
+		public var ignoredMethods:Array = ["dispose"];
 
 		// singleton
 		private static var _instance:ObjectInspectorPanel;
@@ -213,7 +217,7 @@ package ch.adolio.display.ui.inspector.panel
 		{
 			// variable (for static objects)
 			var description:XML = describeType(_object);
-			//Log.debug("Description: " + description + "");
+			//trace("Description: " + description + "");
 
 			var type:String;
 			var name:String;
@@ -270,6 +274,44 @@ package ch.adolio.display.ui.inspector.panel
 				else
 					addObjectReferenceEntry(name, access);
 			}
+
+			// methods
+			for each (var method:XML in description.method)
+			{
+				var methodName:String = method.@name;
+
+				// ignore certain methods
+				if (ignoredMethods.indexOf(methodName) != -1)
+					continue;
+
+				// only treat zero parameters methods
+				var parametersCount:uint = method.parameter.length();
+				if (parametersCount > 0)
+					continue;
+
+				// add method entry
+				addBasicMethodEntry(methodName);
+			}
+		}
+
+		private function addBasicMethodEntry(methodName:String):void
+		{
+			var entry:ActionInspectorEntry = new ActionInspectorEntry("Call " + methodName+"()",
+				function():void
+				{
+					try
+					{
+						_object[methodName]();
+					}
+					catch (e:Error)
+					{
+						trace("An error occured while calling " + methodName + " on " + _object + ". Error:" + e);
+					}
+				}
+			);
+
+			entry.title = "zzzAction " + methodName; // HACK: zzz to sort to the end
+			addEntry(entry);
 		}
 
 		private function addBooleanEntry(fieldName:String, access:String):void
