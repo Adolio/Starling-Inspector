@@ -42,9 +42,9 @@ package ch.adolio.display.ui.inspector.entry
 			_setterFunc = setterFunc;
 
 			_label = new Label();
-			_label.touchable = false;
 			_label.styleName = InspectorConfiguration.STYLE_NAME_LABEL_ENTRY_TITLE;
 			_label.text = title;
+			_label.toolTip = title;
 			_label.height = _preferredHeight;
 			addChild(_label);
 

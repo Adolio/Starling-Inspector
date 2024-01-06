@@ -43,9 +43,9 @@ package ch.adolio.display.ui.inspector.entry
 			this.forcePotTexture = forcePotTexture;
 
 			_titleLabel = new Label();
-			_titleLabel.touchable = false;
 			_titleLabel.styleName = InspectorConfiguration.STYLE_NAME_LABEL_ENTRY_TITLE;
 			_titleLabel.text = title;
+			_titleLabel.toolTip = title;
 			_titleLabel.height = _preferredHeight;
 			_titleLabel.validate();
 			addChild(_titleLabel);

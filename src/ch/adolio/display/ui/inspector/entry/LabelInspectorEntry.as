@@ -27,16 +27,16 @@ package ch.adolio.display.ui.inspector.entry
 			_getterFunc = getterFunc;
 
 			_titleLabel = new Label();
-			_titleLabel.touchable = false;
 			_titleLabel.styleName = InspectorConfiguration.STYLE_NAME_LABEL_ENTRY_TITLE;
 			_titleLabel.text = title;
+			_titleLabel.toolTip = title;
 			_titleLabel.height = _preferredHeight;
 			addChild(_titleLabel);
 
 			_valueLabel = new Label();
-			_valueLabel.touchable = false;
 			_valueLabel.styleName = InspectorConfiguration.STYLE_NAME_LABEL_ENTRY_VALUE;
 			_valueLabel.text = _getterFunc();
+			_valueLabel.toolTip = _valueLabel.text;
 			_valueLabel.height = _preferredHeight;
 			addChild(_valueLabel);
 			_valueLabel.validate();
