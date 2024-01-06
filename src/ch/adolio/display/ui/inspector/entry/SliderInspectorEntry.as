@@ -367,8 +367,21 @@ package ch.adolio.display.ui.inspector.entry
 			if (_configButton)
 				availableWidth -= _configButton.width + InspectorConfiguration.COMPONENTS_PADDING;
 
-			_slider.width = availableWidth * 0.75;
-			_valueTextInput.width = availableWidth - (_slider.width + _sliderExtraRightPadding + InspectorConfiguration.COMPONENTS_PADDING);
+			// compute guessed widths
+			var sliderWidth:Number = availableWidth * InspectorConfiguration.SLIDER_ENTRY_SLIDER_INPUT_WIDTH_RATIO;
+			var textInputWidth:Number =  availableWidth - (sliderWidth + _sliderExtraRightPadding + InspectorConfiguration.COMPONENTS_PADDING);
+
+			// text input min width contraint
+			if (!isNaN(InspectorConfiguration.SLIDER_ENTRY_TEXT_INPUT_MIN_WIDTH))
+				textInputWidth = Math.max(textInputWidth, InspectorConfiguration.SLIDER_ENTRY_TEXT_INPUT_MIN_WIDTH);
+
+			//  text input max width contraint
+			if (!isNaN(InspectorConfiguration.SLIDER_ENTRY_TEXT_INPUT_MAX_WIDTH))
+				textInputWidth = Math.min(textInputWidth, InspectorConfiguration.SLIDER_ENTRY_TEXT_INPUT_MAX_WIDTH);
+
+			// update components
+			_valueTextInput.width = textInputWidth;
+			_slider.width = Math.max(availableWidth - _valueTextInput.width - (_sliderExtraRightPadding + InspectorConfiguration.COMPONENTS_PADDING), 0);
 
 			// place components
 			_label.x = _paddingLeft;

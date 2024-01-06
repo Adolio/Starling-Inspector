@@ -60,10 +60,13 @@ package ch.adolio.display.ui.inspector
 		public static var PANEL_DEFAULT_HEIGHT:Number = 300; // pixels
 
 		// inspection entries
-		public static var ENTRY_TITLE_WIDTH_RATIO:Number = 0.35; // width ratio
+		public static var ENTRY_TITLE_WIDTH_RATIO:Number = 0.35; // width ratio of the entire entry, the rest is for the value part
 		public static var ENTRY_TITLE_MAX_WIDTH:Number = 200; // pixels
 		public static var ENTRY_PREFERRED_HEIGHT:Number = 18; // pixels
 		public static var COMPONENTS_PADDING:Number = 8; // pixels
+		public static var SLIDER_ENTRY_SLIDER_INPUT_WIDTH_RATIO:Number = 0.6; // width ratio of the available value part
+		public static var SLIDER_ENTRY_TEXT_INPUT_MIN_WIDTH:Number = 64; // pixels, use `NaN` for no constraints
+		public static var SLIDER_ENTRY_TEXT_INPUT_MAX_WIDTH:Number = 96; // pixels, use `NaN` for no constraints
 
 		// assets
 		public static var TEXTURE_IMPORT_SCALE_MIN:Number = 1;
