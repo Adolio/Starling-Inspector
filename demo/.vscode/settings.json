@@ -4,6 +4,6 @@
 	"as3mxml.codeGeneration.getterSetter.forcePublicFunctions": true,
 	"files.trimTrailingWhitespace": true,
 	"editor.codeActionsOnSave": {
-		"source.organizeImports": true
+		"source.organizeImports": "explicit"
 	}
 }
