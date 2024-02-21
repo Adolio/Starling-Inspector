@@ -51,9 +51,6 @@ package ch.adolio.display.ui.inspector.panel
 		protected var _vLayout:VerticalLayout;
 		protected var _body:InspectorBody;
 
-		// separators
-		private static var numSeparators:int = 0;
-
 		// footer
 		protected var _footer:Sprite;
 		protected var _footerBackground:Quad;
@@ -131,8 +128,35 @@ package ch.adolio.display.ui.inspector.panel
 			width = _preferredWidth;
 			height = _preferredHeight;
 
-			// register to stage addition
+			// register to stage events
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+		}
+
+		override public function dispose():void
+		{
+			// unregister from stage events
+			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+
+			// dispose parent
+			super.dispose();
+
+			// nullify references
+			_dragOffset = null;
+			_positionAtGrab = null;
+			_header = null;
+			_headerBackground = null;
+			_titleLabel = null;
+			_closeButton = null;
+			_refreshButton = null;
+			_bodyContainer = null;
+			_vLayout = null;
+			_body = null;
+			_footer = null;
+			_footerBackground = null;
+			_sideGrabOffset = null;
+			_sizeGrabber = null;
 		}
 
 		private function setupSizeGrabber():void
@@ -203,9 +227,6 @@ package ch.adolio.display.ui.inspector.panel
 
 		protected function onAddedToStage(e:Event):void
 		{
-			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
-
 			// check screen bounds
 			if (_staysInScreenBounds)
 				checkScreenBounds();
@@ -216,6 +237,16 @@ package ch.adolio.display.ui.inspector.panel
 			_refreshButton.invalidate();
 
 			// register to events
+			registerToEvents();
+		}
+
+		protected function onRemovedFromStage(e:Event):void
+		{
+			unregisterFromEvents()
+		}
+
+		protected function registerToEvents():void
+		{
 			_headerBackground.addEventListener(TouchEvent.TOUCH, onHeaderTouched);
 			_footerBackground.addEventListener(TouchEvent.TOUCH, onHeaderTouched);
 			_closeButton.addEventListener(Event.TRIGGERED, onCloseButtonTriggered);
@@ -225,12 +256,8 @@ package ch.adolio.display.ui.inspector.panel
 				_sizeGrabber.addEventListener(TouchEvent.TOUCH, onBottomSideTouched);
 		}
 
-		protected function onRemovedFromStage(e:Event):void
+		protected function unregisterFromEvents():void
 		{
-			removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
-			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-
-			// unregister from events
 			_headerBackground.removeEventListener(TouchEvent.TOUCH, onHeaderTouched);
 			_footerBackground.removeEventListener(TouchEvent.TOUCH, onHeaderTouched);
 			_closeButton.removeEventListener(Event.TRIGGERED, onCloseButtonTriggered);

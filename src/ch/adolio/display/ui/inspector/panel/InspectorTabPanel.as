@@ -45,6 +45,16 @@ package ch.adolio.display.ui.inspector.panel
 			_tabBar.validate();
 		}
 
+		override public function dispose():void
+		{
+			// dispose parent
+			super.dispose();
+
+			// nullify references
+			_tabBarBackground = null;
+			_tabBar = null;
+		}
+
 		protected function setupTabContentFromTabBar():void
 		{
 			// setup body for currently selected tab index
@@ -112,18 +122,26 @@ package ch.adolio.display.ui.inspector.panel
 
 		override protected function onAddedToStage(e:Event):void
 		{
+			// call parent
 			super.onAddedToStage(e);
-
-			// register to events
-			_tabBar.addEventListener(Event.CHANGE, onTabSelectionChanged);
 
 			// refresh selected index
 			setupTabContentFromTabBar();
 		}
 
-		override protected function onRemovedFromStage(e:Event):void
+		override protected function registerToEvents():void
 		{
-			super.onRemovedFromStage(e);
+			// call parent
+			super.registerToEvents();
+
+			// register to events
+			_tabBar.addEventListener(Event.CHANGE, onTabSelectionChanged);
+		}
+
+		override protected function unregisterFromEvents():void
+		{
+			// call parent
+			super.unregisterFromEvents();
 
 			// unregister from events
 			_tabBar.removeEventListener(Event.CHANGE, onTabSelectionChanged);
