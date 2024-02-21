@@ -43,8 +43,6 @@ package ch.adolio.display.ui.inspector.panel
 			_tabBar.y = _header.height;
 			addChild(_tabBar);
 			_tabBar.validate();
-
-			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 
 		protected function setupTabContentFromTabBar():void
