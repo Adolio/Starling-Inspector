@@ -356,9 +356,19 @@ package ch.adolio.display.ui.inspector.panel
 			if (_body)
 			{
 				_bodyContainer.addChild(_body);
-				_body.width = width;
-				_body.height = height - (_header.height + _footer.height);
+				_body.width = computeBodyWidth();
+				_body.height = computeBodyHeight();
 			}
+		}
+
+		public function computeBodyWidth():Number
+		{
+			return width;
+		}
+
+		public function computeBodyHeight():Number
+		{
+			return height - (_header.height + _footer.height);
 		}
 
 		//---------------------------------------------------------------------
@@ -418,7 +428,7 @@ package ch.adolio.display.ui.inspector.panel
 
 			// update body
 			if (_body)
-				_body.width = value;
+				_body.width = computeBodyWidth();
 		}
 
 		override public function get height():Number
@@ -438,7 +448,7 @@ package ch.adolio.display.ui.inspector.panel
 
 			// update body
 			if (_body)
-				_body.height = value - (_header.height + _footer.height);
+				_body.height = computeBodyHeight();
 		}
 	}
 }

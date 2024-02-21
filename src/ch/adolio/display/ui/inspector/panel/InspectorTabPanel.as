@@ -69,8 +69,8 @@ package ch.adolio.display.ui.inspector.panel
 			_tabBar.dataProvider.addItem({ label: id, body: body });
 
 			// setup tab content
-			body.width = width;
-			body.height = _preferredHeight - _tabBar.height - _header.height;
+			body.width = computeBodyWidth();
+			body.height = computeBodyHeight();
 
 			// adjust body container
 			_tabBar.validate();
@@ -100,6 +100,12 @@ package ch.adolio.display.ui.inspector.panel
 					return;
 				}
 			}
+		}
+
+		// override to take the top bar into account
+		override public function computeBodyHeight():Number
+		{
+			return height - _tabBar.height - _header.height - _footer.height;
 		}
 
 		//---------------------------------------------------------------------
@@ -142,19 +148,6 @@ package ch.adolio.display.ui.inspector.panel
 			_tabBar.width = width;
 			_tabBarBackground.width = width;
 			_tabBar.validate();
-
-			// resize body
-			if (_body)
-				_body.width = width;
-		}
-
-		override public function set height(value:Number):void
-		{
-			super.height = value;
-
-			// resize body
-			if (_body)
-				_body.height = height - _tabBar.height - _header.height - _footer.height;
 		}
 	}
 }
