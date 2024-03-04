@@ -50,6 +50,11 @@ package ch.adolio.display.ui.inspector.entry
 			width = _preferredWidth;
 		}
 
+		public function getIsSelected():Boolean
+		{
+			return _toggleSwitch.isSelected;
+		}
+
 		public function setIsSelected(value:Number, disableCallback:Boolean = true):void
 		{
 			_disableCallback = disableCallback;
