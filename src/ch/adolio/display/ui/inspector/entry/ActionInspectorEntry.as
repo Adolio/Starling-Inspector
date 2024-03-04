@@ -55,6 +55,16 @@ package ch.adolio.display.ui.inspector.entry
 			_triggerFunc();
 		}
 
+		public function get isEnabled():Boolean
+		{
+			return _button.isEnabled;
+		}
+
+		public function set isEnabled(value:Boolean):void
+		{
+			_button.isEnabled = value;
+		}
+
 		//---------------------------------------------------------------------
 		//-- Size management
 		//---------------------------------------------------------------------

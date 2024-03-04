@@ -67,6 +67,16 @@ package ch.adolio.display.ui.inspector.entry
 			setText(_getterFunc());
 		}
 
+		public function get isEnabled():Boolean
+		{
+			return _input.isEnabled;
+		}
+
+		public function set isEnabled(value:Boolean):void
+		{
+			_input.isEnabled = value && _setterFunc;
+		}
+
 		//---------------------------------------------------------------------
 		//-- Event handlers
 		//---------------------------------------------------------------------

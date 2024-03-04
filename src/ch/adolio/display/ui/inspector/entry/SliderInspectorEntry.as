@@ -192,6 +192,17 @@ package ch.adolio.display.ui.inspector.entry
 				_setterFunc(_value);
 		}
 
+		public function get isEnabled():Boolean
+		{
+			return _slider.isEnabled;
+		}
+
+		public function set isEnabled(value:Boolean):void
+		{
+			_slider.isEnabled = value && _setterFunc;
+			_valueTextInput.isEditable = value && _setterFunc;
+		}
+
 		//---------------------------------------------------------------------
 		//-- Event handlers
 		//---------------------------------------------------------------------

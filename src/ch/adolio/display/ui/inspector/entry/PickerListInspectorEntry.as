@@ -65,6 +65,7 @@ package ch.adolio.display.ui.inspector.entry
 			_pickerList.x = _label.x + _label.width + 5;
 			_pickerList.dataProvider = _itemsList;
 			_pickerList.selectedIndex = selectedIndex;
+			_pickerList.isEnabled = _setterFunc;
 			addChild(_pickerList);
 			_pickerList.validate();
 
@@ -100,6 +101,16 @@ package ch.adolio.display.ui.inspector.entry
 			_pickerList.selectedIndex = selectedIndex;
 
 			_disableCallback = false;
+		}
+
+		public function get isEnabled():Boolean
+		{
+			return _pickerList.isEnabled;
+		}
+
+		public function set isEnabled(value:Boolean):void
+		{
+			_pickerList.isEnabled = value && _setterFunc;
 		}
 
 		//---------------------------------------------------------------------

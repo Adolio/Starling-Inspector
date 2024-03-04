@@ -82,6 +82,16 @@ package ch.adolio.display.ui.inspector.entry
 			setIsSelected(_getterFunc(), true);
 		}
 
+		public function get isEnabled():Boolean
+		{
+			return _check.isEnabled;
+		}
+
+		public function set isEnabled(value:Boolean):void
+		{
+			_check.isEnabled = value && _setterFunc;
+		}
+
 		//---------------------------------------------------------------------
 		//-- Size management
 		//---------------------------------------------------------------------
