@@ -20,7 +20,7 @@ package ch.adolio.display.ui.inspector.entry
 		private var _label:Label;
 		private var _check:Check;
 		private var _getterFunc:Function;
-		private var _setteFunc:Function;
+		private var _setterFunc:Function;
 
 		private var _disableCallback:Boolean = false;
 
@@ -28,7 +28,7 @@ package ch.adolio.display.ui.inspector.entry
 		{
 			_title = title;
 			_getterFunc = getterFunc;
-			_setteFunc = setterFunc;
+			_setterFunc = setterFunc;
 
 			_label = new Label();
 			_label.styleName = InspectorConfiguration.STYLE_NAME_LABEL_ENTRY_TITLE;
@@ -73,8 +73,8 @@ package ch.adolio.display.ui.inspector.entry
 
 		private function onCheckValueChanged(e:Event):void
 		{
-			if (_setteFunc && !_disableCallback)
-				_setteFunc(_check.isSelected);
+			if (_setterFunc && !_disableCallback)
+				_setterFunc(_check.isSelected);
 		}
 
 		override public function refresh():void

@@ -27,7 +27,7 @@ package ch.adolio.display.ui.inspector.entry
 		private var _slider:Slider;
 		private var _valueTextInput:TextInput;
 		private var _getterFunc:Function;
-		private var _setteFunc:Function;
+		private var _setterFunc:Function;
 		private var _isValueClampingEnabled:Boolean = true;
 		private var _doUpdateValueOnTextInputValueChanged:Boolean = false;
 		private var _doUpdateValueOnTextInputFocusOut:Boolean = true;
@@ -55,7 +55,7 @@ package ch.adolio.display.ui.inspector.entry
 		{
 			_title = title;
 			_getterFunc = getterFunc;
-			_setteFunc = setterFunc;
+			_setterFunc = setterFunc;
 
 			// setup precision
 			if (numberPrecision < 0)
@@ -90,7 +90,7 @@ package ch.adolio.display.ui.inspector.entry
 			addChild(_valueTextInput);
 
 			// setup for read-only
-			if (!_setteFunc)
+			if (!_setterFunc)
 			{
 				_slider.isEnabled = false;
 				_valueTextInput.isEditable = false;
@@ -188,8 +188,8 @@ package ch.adolio.display.ui.inspector.entry
 			_disableSliderChangeEventReaction = false;
 
 			// call callback
-			if (_setteFunc)
-				_setteFunc(_value);
+			if (_setterFunc)
+				_setterFunc(_value);
 		}
 
 		//---------------------------------------------------------------------
@@ -310,8 +310,8 @@ package ch.adolio.display.ui.inspector.entry
 			_valueTextInput.text = formatNumber(_slider.value, _numberPrecision);
 			_disableTextInputChangeEventReaction = false;
 
-			if (_setteFunc)
-				_setteFunc(_value);
+			if (_setterFunc)
+				_setterFunc(_value);
 		}
 
 		private function onTextInputValueChanged(e:Event):void
