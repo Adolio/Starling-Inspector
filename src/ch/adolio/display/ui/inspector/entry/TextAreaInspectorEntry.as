@@ -50,6 +50,11 @@ package ch.adolio.display.ui.inspector.entry
 			width = _preferredWidth;
 		}
 
+		public function getText():String
+		{
+			return _input.text;
+		}
+
 		public function setText(text:String):void
 		{
 			_disableCallback = true;
