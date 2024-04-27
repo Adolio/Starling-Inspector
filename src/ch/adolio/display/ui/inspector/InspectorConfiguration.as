@@ -33,6 +33,7 @@ package ch.adolio.display.ui.inspector
 		public static var STYLE_NAME_CHECK:String = "";
 		public static var STYLE_NAME_TOGGLE_SWITCH:String = "";
 		public static var STYLE_NAME_TAB_TOGGLE_BUTTON:String = "";
+		public static var STYLE_NAME_PANEL_REFRESH_BUTTON:String = "";
 		public static var STYLE_NAME_PANEL_BACK_BUTTON:String = "";
 		public static var STYLE_NAME_PANEL_CLOSE_BUTTON:String = "";
 

@@ -91,6 +91,7 @@ package ch.adolio.display.ui.inspector.panel.asset
 
 			// select button
 			_selectButton = new Button();
+			_selectButton.styleName = InspectorConfiguration.STYLE_NAME_BUTTON;
 			_selectButton.label = "Select";
 			_selectButton.validate();
 			_selectButton.height *= 2; // double size for better visibility

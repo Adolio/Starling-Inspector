@@ -87,7 +87,7 @@ package ch.adolio.display.ui.inspector.panel
 			_header.addChild(_titleLabel);
 
 			_refreshButton = new Button();
-			_refreshButton.styleName = InspectorConfiguration.STYLE_NAME_PANEL_BACK_BUTTON;
+			_refreshButton.styleName = InspectorConfiguration.STYLE_NAME_PANEL_REFRESH_BUTTON;
 			_refreshButton.height = _header.height;
 			_refreshButton.label = "Refresh";
 			_refreshButton.maxHeight = _header.height;
