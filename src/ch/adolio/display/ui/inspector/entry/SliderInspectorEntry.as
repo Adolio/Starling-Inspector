@@ -31,6 +31,7 @@ package ch.adolio.display.ui.inspector.entry
 		private var _isValueClampingEnabled:Boolean = true;
 		private var _doUpdateValueOnTextInputValueChanged:Boolean = false;
 		private var _doUpdateValueOnTextInputFocusOut:Boolean = true;
+		private var _doUpdateValueOnTextInputEnterKeyPressed:Boolean = true;
 
 		private var _disableSliderChangeEventReaction:Boolean;
 		private var _disableTextInputChangeEventReaction:Boolean;
@@ -221,6 +222,7 @@ package ch.adolio.display.ui.inspector.entry
 			_valueTextInput.addEventListener(Event.CHANGE, onTextInputValueChanged);
 			_valueTextInput.addEventListener(FeathersEventType.FOCUS_IN, onValueTextInputFocusedIn);
 			_valueTextInput.addEventListener(FeathersEventType.FOCUS_OUT, onValueTextInputFocusedOut);
+			_valueTextInput.addEventListener(FeathersEventType.ENTER, onValueTextInputEnterKeyPressed);
 
 			if (_configButton)
 				_configButton.addEventListener(Event.TRIGGERED, onConfigButtonTriggered);
@@ -237,6 +239,7 @@ package ch.adolio.display.ui.inspector.entry
 			_valueTextInput.removeEventListener(Event.CHANGE, onTextInputValueChanged);
 			_valueTextInput.removeEventListener(FeathersEventType.FOCUS_IN, onValueTextInputFocusedIn);
 			_valueTextInput.removeEventListener(FeathersEventType.FOCUS_OUT, onValueTextInputFocusedOut);
+			_valueTextInput.removeEventListener(FeathersEventType.ENTER, onValueTextInputEnterKeyPressed);
 
 			if (_configButton)
 				_configButton.removeEventListener(Event.TRIGGERED, onConfigButtonTriggered);
@@ -345,6 +348,13 @@ package ch.adolio.display.ui.inspector.entry
 		{
 			// update value
 			if (_doUpdateValueOnTextInputFocusOut)
+				updateValueFromTextInput();
+		}
+
+		private function onValueTextInputEnterKeyPressed(e:Event):void
+		{
+			// update value
+			if (_doUpdateValueOnTextInputEnterKeyPressed)
 				updateValueFromTextInput();
 		}
 
