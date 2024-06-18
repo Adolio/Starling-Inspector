@@ -88,6 +88,7 @@ package ch.adolio.display.ui.inspector.entry
 			_valueTextInput.styleName = InspectorConfiguration.STYLE_NAME_TEXT_INPUT;
 			_valueTextInput.text = formatNumber(_slider.value, _numberPrecision);
 			_valueTextInput.height = _preferredHeight;
+			_valueTextInput.restrict = "0-9.\\-";
 			addChild(_valueTextInput);
 
 			// setup for read-only
