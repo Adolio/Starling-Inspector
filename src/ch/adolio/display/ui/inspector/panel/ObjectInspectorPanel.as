@@ -422,11 +422,12 @@ package ch.adolio.display.ui.inspector.panel
 			}
 			else if (access == ACCESS_READ_WRITE)
 			{
-				addEntry(new SliderInspectorEntry(fieldName,
+				var sliderEntry:SliderInspectorEntry = new SliderInspectorEntry(fieldName,
 					function():Number { return _object[fieldName]; },
 					function(value:Number):void { _object[fieldName] = value; },
-					min, max, step, false)
-				);
+					min, max, step, false);
+				sliderEntry.isValueClampingEnabled = false; // disable clamping since limits were guessed
+				addEntry(sliderEntry);
 			}
 			else
 			{
@@ -482,11 +483,12 @@ package ch.adolio.display.ui.inspector.panel
 			}
 			else if (access == ACCESS_READ_WRITE)
 			{
-				addEntry(new SliderInspectorEntry(fieldName,
+				var sliderEntry:SliderInspectorEntry = new SliderInspectorEntry(fieldName,
 					function():int { return _object[fieldName]; },
 					function(value:int):void { _object[fieldName] = value; },
-					min, max, step, false)
-				);
+					min, max, step, false);
+				sliderEntry.isValueClampingEnabled = false; // disable clamping since limits were guessed
+				addEntry(sliderEntry);
 			}
 			else
 			{
@@ -525,11 +527,12 @@ package ch.adolio.display.ui.inspector.panel
 			}
 			else if (access == ACCESS_READ_WRITE)
 			{
-				addEntry(new SliderInspectorEntry(fieldName,
+				var sliderEntry:SliderInspectorEntry = new SliderInspectorEntry(fieldName,
 					function():uint { return _object[fieldName]; },
 					function(value:uint):void { _object[fieldName] = value; },
-					min, max, step, false)
-				);
+					min, max, step, false);
+				sliderEntry.isValueClampingEnabled = false; // disable clamping since limits were guessed
+				addEntry(sliderEntry);
 			}
 			else
 			{
