@@ -26,12 +26,15 @@ package ch.adolio.display.ui.inspector.entry
 			_title = title;
 			_getterFunc = getterFunc;
 
-			_titleLabel = new Label();
-			_titleLabel.styleName = InspectorConfiguration.STYLE_NAME_LABEL_ENTRY_TITLE;
-			_titleLabel.text = title;
-			_titleLabel.toolTip = title;
-			_titleLabel.height = _preferredHeight;
-			addChild(_titleLabel);
+			if (_title != null && _title.length > 0)
+			{
+				_titleLabel = new Label();
+				_titleLabel.styleName = InspectorConfiguration.STYLE_NAME_LABEL_ENTRY_TITLE;
+				_titleLabel.text = title;
+				_titleLabel.toolTip = title;
+				_titleLabel.height = _preferredHeight;
+				addChild(_titleLabel);
+			}
 
 			_valueLabel = new Label();
 			_valueLabel.styleName = InspectorConfiguration.STYLE_NAME_LABEL_ENTRY_VALUE;
@@ -86,10 +89,20 @@ package ch.adolio.display.ui.inspector.entry
 		{
 			_preferredWidth = value;
 
-			_titleLabel.x = _paddingLeft;
-			_titleLabel.width = getLabelWidth();
-			_valueLabel.x = _titleLabel.x + _titleLabel.width + InspectorConfiguration.COMPONENTS_PADDING;
-			_valueLabel.width = getAvailableWidthForInputComponents();
+			// titled
+			if (_titleLabel)
+			{
+				_titleLabel.x = _paddingLeft;
+				_titleLabel.width = getLabelWidth();
+				_valueLabel.x = _titleLabel.x + _titleLabel.width + InspectorConfiguration.COMPONENTS_PADDING;
+				_valueLabel.width = getAvailableWidthForInputComponents();
+			}
+			// no title
+			else
+			{
+				_valueLabel.x = _paddingLeft;
+				_valueLabel.width = getWidthWithoutPaddings();
+			}
 		}
 	}
 }
