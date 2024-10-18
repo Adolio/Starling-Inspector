@@ -359,14 +359,28 @@ package ch.adolio.display.ui.inspector.entry
 				updateValueFromTextInput();
 		}
 
+		override public function refresh():void
+		{
+			setValue(_getterFunc(), true);
+		}
+
+		//---------------------------------------------------------------------
+		//-- Accessors
+		//---------------------------------------------------------------------
+
+		public function get titleLabel():Label
+		{
+			return _label;
+		}
+
 		public function get slider():Slider
 		{
 			return _slider;
 		}
 
-		override public function refresh():void
+		public function get valueTextInput():TextInput
 		{
-			setValue(_getterFunc(), true);
+			return _valueTextInput;
 		}
 
 		//---------------------------------------------------------------------

@@ -60,6 +60,20 @@ package ch.adolio.display.ui.inspector.entry
 		}
 
 		//---------------------------------------------------------------------
+		//-- Accessors
+		//---------------------------------------------------------------------
+
+		public function get titleLabel():Label
+		{
+			return _titleLabel;
+		}
+
+		public function get valueLabel():Label
+		{
+			return _valueLabel;
+		}
+
+		//---------------------------------------------------------------------
 		//-- Size management
 		//---------------------------------------------------------------------
 

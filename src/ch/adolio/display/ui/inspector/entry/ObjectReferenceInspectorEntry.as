@@ -74,6 +74,20 @@ package ch.adolio.display.ui.inspector.entry
 		}
 
 		//---------------------------------------------------------------------
+		//-- Accessors
+		//---------------------------------------------------------------------
+
+		public function get titleLabel():Label
+		{
+			return _label;
+		}
+
+		public function get inspectButton():Button
+		{
+			return _inspectButton;
+		}
+
+		//---------------------------------------------------------------------
 		//-- Size management
 		//---------------------------------------------------------------------
 

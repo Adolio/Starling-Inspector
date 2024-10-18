@@ -76,6 +76,20 @@ package ch.adolio.display.ui.inspector.entry
 		}
 
 		//---------------------------------------------------------------------
+		//-- Accessors
+		//---------------------------------------------------------------------
+
+		public function get titleLabel():Label
+		{
+			return _label;
+		}
+
+		public function get textInput():TextInput
+		{
+			return _input;
+		}
+
+		//---------------------------------------------------------------------
 		//-- Event handlers
 		//---------------------------------------------------------------------
 
