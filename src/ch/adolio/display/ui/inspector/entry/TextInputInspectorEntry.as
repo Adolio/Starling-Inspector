@@ -41,7 +41,7 @@ package ch.adolio.display.ui.inspector.entry
 			_input.styleName = InspectorConfiguration.STYLE_NAME_TEXT_INPUT;
 			_input.height = _preferredHeight;
 			_input.text = getterFunc();
-			_input.isEnabled = _setterFunc;
+			_input.isEditable = _setterFunc;
 			addChild(_input);
 			_input.validate();
 
