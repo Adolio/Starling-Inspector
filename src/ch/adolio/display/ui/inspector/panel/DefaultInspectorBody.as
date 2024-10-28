@@ -31,16 +31,17 @@ package ch.adolio.display.ui.inspector.panel
 
 			// setup vertical scroll container
 			_scrollContainer = new ScrollContainer();
-			_vLayout  = new VerticalLayout();
+			_vLayout = new VerticalLayout();
 			_vLayout.horizontalAlign = HorizontalAlign.LEFT;
 			_vLayout.verticalAlign = VerticalAlign.TOP;
 			_vLayout.gap = InspectorConfiguration.COMPONENTS_PADDING;
+			_vLayout.padding = InspectorConfiguration.COMPONENTS_PADDING;
 			_scrollContainer.layout = _vLayout;
 			_scrollContainer.interactionMode = ScrollInteractionMode.TOUCH_AND_SCROLL_BARS;
 			_scrollContainer.horizontalScrollPolicy = ScrollPolicy.OFF;
 			_scrollContainer.verticalScrollPolicy = ScrollPolicy.AUTO;
 			_scrollContainer.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
-			_scrollContainer.padding = InspectorConfiguration.COMPONENTS_PADDING;
+			_scrollContainer.padding = 0;
 			addChild(_scrollContainer);
 
 			// setup the entries container
@@ -70,7 +71,7 @@ package ch.adolio.display.ui.inspector.panel
 
 		override protected function computeEntryWidth():Number
 		{
-			return _preferredWidth - (_scrollContainer.paddingLeft + _scrollContainer.paddingRight);
+			return _preferredWidth - (_vLayout.paddingLeft + _vLayout.paddingRight);
 		}
 
 		override public function set height(value:Number):void
