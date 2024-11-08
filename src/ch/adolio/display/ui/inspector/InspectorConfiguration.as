@@ -58,7 +58,7 @@ package ch.adolio.display.ui.inspector
 		public static var PANEL_FOOTER_HEIGHT:Number = 20; // pixels
 		public static var PANEL_FOOTER_SIZE_GRABBER_COLOR:uint = 0x666666;
 		public static var PANEL_DEFAULT_WIDTH:Number = 300; // pixels
-		public static var PANEL_DEFAULT_HEIGHT:Number = 300; // pixels
+		public static var PANEL_DEFAULT_HEIGHT:Number = NaN; // pixels, use `NaN` for auto-size
 
 		// inspection entries
 		public static var ENTRY_TITLE_WIDTH_RATIO:Number = 0.35; // width ratio of the entire entry, the rest is for the value part

@@ -45,7 +45,10 @@ package ch.adolio.display.ui.inspector.panel
 
 			// setup title
 			title = "Color Selector";
+		}
 
+		override protected function createEntries():void
+		{
 			createColorPreview();
 
 			addSparatorEntry("RGB");
@@ -89,9 +92,6 @@ package ch.adolio.display.ui.inspector.panel
 			addEntry(_lightnessSlider);
 
 			addEntry(new ActionInspectorEntry("OK", function():void { close(); }));
-
-			// setup size
-			setupHeightFromContent();
 		}
 
 		private function createColorPreview():void

@@ -35,15 +35,18 @@ package ch.adolio.display.ui.inspector.panel
 
 		public function SliderConfigPanel(min:Number, max:Number, step:Number)
 		{
-			super(true, true, false);
-
 			_min = min;
 			_max = max;
 			_step = step;
 
+			super(true, true, false);
+
 			// setup title
 			title = "Slider Config";
+		}
 
+		override protected function createEntries():void
+		{
 			// create sliders
 			_minTextInput = new TextInputInspectorEntry("Min",
 				function():String { return _min.toString(); },
@@ -59,9 +62,6 @@ package ch.adolio.display.ui.inspector.panel
 				function():String { return _step.toString(); },
 				function(value:String):void { _step = parseFloat(value); stepChanged.dispatch(_step); });
 			addEntry(_stepTextInput);
-
-			// setup default size
-			setupHeightFromContent();
 		}
 
 		public function set min(value:Number):void

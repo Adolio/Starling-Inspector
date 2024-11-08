@@ -33,6 +33,7 @@ package ch.adolio.display.ui.inspector.panel.asset
 		private var _assetsManager:AssetManager;
 
 		private var _texturePot:Boolean;
+		private var _powerOfTwoOnly:Boolean;
 		private var _textureScale:Number = InspectorConfiguration.TEXTURE_IMPORT_SCALE_DEFAULT;
 		private var _textureMipmaps:Boolean;
 		private var _textureFormat:String = Context3DTextureFormat.BGRA;
@@ -48,14 +49,18 @@ package ch.adolio.display.ui.inspector.panel.asset
 
 		public function AssetTextureImportPanel(assetsManager:AssetManager, powerOfTwoOnly:Boolean = false)
 		{
-			super(true, true);
-
 			_assetsManager = assetsManager;
+			_powerOfTwoOnly = powerOfTwoOnly;
 			_texturePot = powerOfTwoOnly;
+
+			super(true, true);
 
 			// setup title
 			title = "Texture importation";
+		}
 
+		override protected function createEntries():void
+		{
 			addSparatorEntry("Options");
 
 			addEntry(new CheckInspectorEntry("Generate mipmaps?",
@@ -65,7 +70,7 @@ package ch.adolio.display.ui.inspector.panel.asset
 
 			addEntry(new CheckInspectorEntry("Is power of two?",
 				function():Boolean { return _texturePot; },
-				powerOfTwoOnly ? null : function(value:Boolean):void { _texturePot = value; }
+				_powerOfTwoOnly ? null : function(value:Boolean):void { _texturePot = value; }
 			));
 
 			addSparatorEntry("Source file");

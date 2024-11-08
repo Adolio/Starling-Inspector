@@ -124,13 +124,46 @@ package ch.adolio.display.ui.inspector.panel
 			if (_isResizeable)
 				setupSizeGrabber();
 
+			// create entries
+			createEntries();
+
 			// setup size
-			width = _preferredWidth;
-			height = _preferredHeight;
+			setupWidth();
+			setupHeight();
 
 			// register to stage events
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+		}
+
+		/**
+		 * Setups the panel width to the default/preferred value.
+		 */
+		public function setupWidth():void
+		{
+			width = _preferredWidth;
+		}
+
+		/**
+		 * Setups the panel height to the default/preferred value.
+		 */
+		public function setupHeight():void
+		{
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				height = _preferredHeight;
+			else
+				setupHeightFromContent();
+		}
+
+		/**
+		 * Creates the inspector entries.
+		 *
+		 * This method is called during the construction of the panel.
+		 * It should be overridden to create the inspector entries.
+		 */
+		protected function createEntries():void
+		{
+			// to override
 		}
 
 		override public function dispose():void
@@ -362,6 +395,11 @@ package ch.adolio.display.ui.inspector.panel
 		/** Refreshes all entries from values. */
 		public function updateEntries():void
 		{
+			// handle unset body
+			if (!_body)
+				return;
+
+			// update entries
 			for each (var entry:DisplayObject in _body.entries)
 			{
 				if (entry is InspectorEntry)

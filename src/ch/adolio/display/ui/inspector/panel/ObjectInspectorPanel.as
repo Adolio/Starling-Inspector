@@ -180,6 +180,19 @@ package ch.adolio.display.ui.inspector.panel
 			_backButton.visible = _objectStack.length > 0;
 		}
 
+		//---------------------------------------------------------------------
+		//-- Size management
+		//---------------------------------------------------------------------
+
+		override public function setupHeightFromContent():void
+		{
+			// don't setup height until there are entries
+			if (_body.entries.length == 0)
+				return;
+
+			super.setupHeightFromContent();
+		}
+
 		//----------------------------------------------------------------------
 		//-- Entries management
 		//----------------------------------------------------------------------
@@ -195,9 +208,10 @@ package ch.adolio.display.ui.inspector.panel
 				createEntriesFromClassDescription();
 
 			// setup size at the first inspection
-			if (_hasSizeBeenSetup)
+			if (!_hasSizeBeenSetup)
 			{
-				setupHeightFromContent();
+				setupWidth();
+				setupHeight();
 				_hasSizeBeenSetup = true;
 			}
 		}
