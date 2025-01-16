@@ -1,4 +1,9 @@
+# Library
 bin/
 obj/
+.vscode/settings.json
+
+# Demo
 demo/bin/
 demo/obj/
+demo/.vscode/settings.json
