@@ -38,12 +38,12 @@ package ch.adolio.display.ui.inspector
 		public static var STYLE_NAME_PANEL_CLOSE_BUTTON:String = "";
 
 		// colors
-		public static var COLOR_PANEL_HEADER_BACKGROUND_COLOR:uint = 0x000000;
-		public static var COLOR_PANEL_HEADER_BACKGROUND_ALPHA:Number = 0.8;
-		public static var COLOR_PANEL_FOOTER_BACKGROUND_COLOR:uint = 0x555555;
-		public static var COLOR_PANEL_FOOTER_BACKGROUND_ALPHA:Number = 0.8;
+		public static var COLOR_PANEL_HEADER_BACKGROUND_COLOR:uint = 0x222222;
+		public static var COLOR_PANEL_HEADER_BACKGROUND_ALPHA:Number = 0.9;
+		public static var COLOR_PANEL_FOOTER_BACKGROUND_COLOR:uint = 0x444444;
+		public static var COLOR_PANEL_FOOTER_BACKGROUND_ALPHA:Number = 0.9;
 		public static var COLOR_PANEL_BODY_BACKGROUND_COLOR:uint = 0xffffff;
-		public static var COLOR_PANEL_BODY_BACKGROUND_ALPHA:Number = 0.8;
+		public static var COLOR_PANEL_BODY_BACKGROUND_ALPHA:Number = 0.9;
 		public static var COLOR_BACKGROUND_HIGHLIGHT:uint = 0xBAD1DF;
 
 		// inspection overlay
