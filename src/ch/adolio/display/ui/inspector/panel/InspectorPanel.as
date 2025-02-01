@@ -65,6 +65,9 @@ package ch.adolio.display.ui.inspector.panel
 		// screen
 		private static var screenBounds:Rectangle = new Rectangle();
 
+		// state
+		protected var _isDisposed:Boolean;
+
 		public function InspectorPanel(isClosable:Boolean = true, isResizeable:Boolean = true, isRefreshable:Boolean = true)
 		{
 			_isResizeable = isResizeable;
@@ -174,6 +177,7 @@ package ch.adolio.display.ui.inspector.panel
 
 			// dispose parent
 			super.dispose();
+			_isDisposed = true;
 
 			// nullify references
 			_dragOffset = null;
@@ -190,6 +194,11 @@ package ch.adolio.display.ui.inspector.panel
 			_footerBackground = null;
 			_sideGrabOffset = null;
 			_sizeGrabber = null;
+		}
+
+		public function get isDisposed():Boolean
+		{
+			return _isDisposed;
 		}
 
 		private function setupSizeGrabber():void
