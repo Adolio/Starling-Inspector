@@ -491,14 +491,26 @@ package ch.adolio.display.ui.inspector.panel
 
 			// update components
 			_preferredWidth = value;
-			_closeButton.x = value - _closeButton.width;
-			_refreshButton.x = _closeButton.x - _refreshButton.width;
-			_titleLabel.width = value - _closeButton.width - _refreshButton.width;
-			_headerBackground.width = value;
-			_footerBackground.width = value;
+			var usedSpace:Number = 0;
+
+			if (_closeButton.visible)
+			{
+				_closeButton.x = _preferredWidth - usedSpace - _closeButton.width;
+				usedSpace += _closeButton.width;
+			}
+
+			if (_refreshButton.visible)
+			{
+				_refreshButton.x = _preferredWidth - usedSpace - _refreshButton.width;
+				usedSpace += _refreshButton.width;
+			}
+
+			_titleLabel.width = _preferredWidth - usedSpace;
+			_headerBackground.width = _preferredWidth;
+			_footerBackground.width = _preferredWidth;
 
 			if (_sizeGrabber)
-				_sizeGrabber.x = value - _sizeGrabber.width;
+				_sizeGrabber.x = _preferredWidth - _sizeGrabber.width;
 
 			// update body
 			if (_body)
