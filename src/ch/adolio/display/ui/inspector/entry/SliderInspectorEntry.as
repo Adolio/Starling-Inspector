@@ -68,7 +68,11 @@ package ch.adolio.display.ui.inspector.entry
 			_label.styleName = InspectorConfiguration.STYLE_NAME_LABEL_ENTRY_TITLE;
 			_label.text = title;
 			_label.toolTip = title;
-			_label.height = _preferredHeight;
+
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				_label.height = _preferredHeight;
+
+			_label.validate();
 			addChild(_label);
 
 			_value = _getterFunc();
@@ -78,17 +82,24 @@ package ch.adolio.display.ui.inspector.entry
 			_slider.minimum = min;
 			_slider.maximum = max;
 			_slider.step = step;
-			_slider.height = _preferredHeight;
+
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				_slider.height = _preferredHeight;
+
 			_slider.minWidth = 0;
 			_slider.value = _value;
-			addChild(_slider);
 			_slider.validate();
+			addChild(_slider);
 
 			_valueTextInput = new TextInput();
 			_valueTextInput.styleName = InspectorConfiguration.STYLE_NAME_TEXT_INPUT;
 			_valueTextInput.text = formatNumber(_slider.value, _numberPrecision);
-			_valueTextInput.height = _preferredHeight;
+
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				_valueTextInput.height = _preferredHeight;
+
 			_valueTextInput.restrict = "0-9.\\-";
+			_valueTextInput.validate();
 			addChild(_valueTextInput);
 
 			// setup for read-only
@@ -103,8 +114,14 @@ package ch.adolio.display.ui.inspector.entry
 				_configButton = new Button();
 				_configButton.styleName = InspectorConfiguration.STYLE_NAME_BUTTON;
 				_configButton.label = "c";
-				_configButton.width = _preferredHeight;
-				_configButton.height = _preferredHeight;
+
+				if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				{
+					_configButton.width = _preferredHeight;
+					_configButton.height = _preferredHeight;
+				}
+
+				_configButton.validate();
 				addChild(_configButton);
 			}
 

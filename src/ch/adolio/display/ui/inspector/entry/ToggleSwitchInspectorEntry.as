@@ -34,14 +34,21 @@ package ch.adolio.display.ui.inspector.entry
 			_label.styleName = InspectorConfiguration.STYLE_NAME_LABEL_ENTRY_TITLE;
 			_label.text = title;
 			_label.toolTip = title;
-			_label.height = _preferredHeight;
+
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				_label.height = _preferredHeight;
+
+			_label.validate();
 			addChild(_label);
 
 			_toggleSwitch = new ToggleSwitch();
 			_toggleSwitch.styleName = InspectorConfiguration.STYLE_NAME_TOGGLE_SWITCH;
 			_toggleSwitch.isEnabled = setterFunc != null;
 			_toggleSwitch.isSelected = _getterFunc();
-			_toggleSwitch.height = _preferredHeight;
+
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				_toggleSwitch.height = _preferredHeight;
+
 			_toggleSwitch.onText = onText;
 			_toggleSwitch.offText = offText;
 			_toggleSwitch.validate();

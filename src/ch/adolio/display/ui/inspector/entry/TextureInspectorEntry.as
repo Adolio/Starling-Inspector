@@ -46,15 +46,18 @@ package ch.adolio.display.ui.inspector.entry
 			_titleLabel.styleName = InspectorConfiguration.STYLE_NAME_LABEL_ENTRY_TITLE;
 			_titleLabel.text = title;
 			_titleLabel.toolTip = title;
-			_titleLabel.height = _preferredHeight;
+
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				_titleLabel.height = _preferredHeight;
+
 			_titleLabel.validate();
 			addChild(_titleLabel);
 
 			_loadFromAssetManagerButton = new Button();
 			_loadFromAssetManagerButton.styleName = InspectorConfiguration.STYLE_NAME_BUTTON;
 			_loadFromAssetManagerButton.label = "Select";
-			_loadFromAssetManagerButton.validate();
 			_loadFromAssetManagerButton.isEnabled = setterFunc != null && _assetManager != null;
+			_loadFromAssetManagerButton.validate();
 			addChild(_loadFromAssetManagerButton);
 
 			_texture = _getterFunc();

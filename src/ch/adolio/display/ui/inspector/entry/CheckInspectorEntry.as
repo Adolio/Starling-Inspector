@@ -34,14 +34,21 @@ package ch.adolio.display.ui.inspector.entry
 			_label.styleName = InspectorConfiguration.STYLE_NAME_LABEL_ENTRY_TITLE;
 			_label.text = title;
 			_label.toolTip = title;
-			_label.height = _preferredHeight;
+
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				_label.height = _preferredHeight;
+
+			_label.validate();
 			addChild(_label);
 
 			_check = new Check();
 			_check.styleName = InspectorConfiguration.STYLE_NAME_CHECK;
 			_check.isEnabled = setterFunc != null;
 			_check.isSelected = _getterFunc();
-			_check.height = _preferredHeight;
+
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				_check.height = _preferredHeight;
+
 			_check.validate();
 			addChild(_check);
 

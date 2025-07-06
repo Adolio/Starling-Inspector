@@ -25,7 +25,10 @@ package ch.adolio.display.ui.inspector.entry
 			_label.touchable = false;
 			_label.styleName = InspectorConfiguration.STYLE_NAME_LABEL_SEPARATOR_TITLE;
 			_label.text = title;
-			_label.height = _preferredHeight;
+
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				_label.height = _preferredHeight;
+
 			_label.validate();
 			addChild(_label);
 

@@ -101,7 +101,7 @@ package ch.adolio.display.ui.inspector.entry
 
 		override public function get height():Number
 		{
-			return _preferredHeight;
+			return !isNaN(_preferredHeight) && _preferredHeight > 0 ? _preferredHeight : super.height;
 		}
 
 		override public function set height(value:Number):void

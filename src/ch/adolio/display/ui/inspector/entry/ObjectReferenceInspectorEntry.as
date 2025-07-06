@@ -35,19 +35,25 @@ package ch.adolio.display.ui.inspector.entry
 			_label.styleName = InspectorConfiguration.STYLE_NAME_LABEL_ENTRY_TITLE;
 			_label.text = title;
 			_label.toolTip = title;
-			_label.height = _preferredHeight;
+
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				_label.height = _preferredHeight;
+
+			_label.validate();
 			addChild(_label);
 
 			// button
 			_inspectButton = new Button();
 			_inspectButton.styleName = InspectorConfiguration.STYLE_NAME_BUTTON;
-			_inspectButton.height = _preferredHeight;
-			addChild(_inspectButton);
 
-			// setup value
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				_inspectButton.height = _preferredHeight;
+
 			var value:Object = getterFunc();
 			_inspectButton.isEnabled = value != null && _inspectRequestFunc;
 			_inspectButton.label = "Inspect " + InspectionUtils.findObjectName(value);
+			_inspectButton.validate();
+			addChild(_inspectButton);
 
 			// setup height from button height
 			_preferredHeight = _inspectButton.height;

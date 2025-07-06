@@ -45,28 +45,39 @@ package ch.adolio.display.ui.inspector.entry
 			_label.styleName = InspectorConfiguration.STYLE_NAME_LABEL_ENTRY_TITLE;
 			_label.text = title;
 			_label.toolTip = title;
-			_label.height = _preferredHeight;
+
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				_label.height = _preferredHeight;
+
+			_label.validate();
 			addChild(_label);
 
 			var color:uint = 0;
 			color = _getterFunc();
 
+			// color text input
+			_colorTextInput = new TextInput();
+			_colorTextInput.styleName = InspectorConfiguration.STYLE_NAME_TEXT_INPUT;
+
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				_colorTextInput.height = _preferredHeight;
+
+			_colorTextInput.text = ColorSelectorPanel.colorToHexString(color);
+			_colorTextInput.validate();
+			addChild(_colorTextInput);
+
+			// color preview
+			var previewSize:Number = _colorTextInput.height;
 			_previewContainer = new Sprite();
 			var bgMargin:Number = 2;
-			var previewBackground:Quad = new Quad(_preferredHeight, _preferredHeight, 0x0);
+			var previewBackground:Quad = new Quad(previewSize, previewSize, 0x0);
 			_previewContainer.addChild(previewBackground);
-			_previewColor = new Quad(_preferredHeight - 2*bgMargin, _preferredHeight - 2*bgMargin, color);
+			_previewColor = new Quad(previewSize - 2*bgMargin, previewSize - 2*bgMargin, color);
 			_previewColor.x = bgMargin;
 			_previewColor.y = bgMargin;
 			_previewColor.useHandCursor = true;
 			_previewContainer.addChild(_previewColor);
 			addChild(_previewContainer);
-
-			_colorTextInput = new TextInput();
-			_colorTextInput.styleName = InspectorConfiguration.STYLE_NAME_TEXT_INPUT;
-			_colorTextInput.height = _preferredHeight;
-			_colorTextInput.text = ColorSelectorPanel.colorToHexString(color);
-			addChild(_colorTextInput);
 
 			width = _preferredWidth;
 

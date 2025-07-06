@@ -28,9 +28,12 @@ package ch.adolio.display.ui.inspector.entry
 			_button = new Button();
 			_button.styleName = InspectorConfiguration.STYLE_NAME_BUTTON;
 			_button.label = actionLabel;
-			_button.height = _preferredHeight;
-			addChild(_button);
+
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				_button.height = _preferredHeight;
+
 			_button.validate();
+			addChild(_button);
 
 			// setup height from button height
 			_preferredHeight = _button.height;

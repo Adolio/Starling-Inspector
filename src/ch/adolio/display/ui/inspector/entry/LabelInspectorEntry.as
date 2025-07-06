@@ -32,7 +32,11 @@ package ch.adolio.display.ui.inspector.entry
 				_titleLabel.styleName = InspectorConfiguration.STYLE_NAME_LABEL_ENTRY_TITLE;
 				_titleLabel.text = title;
 				_titleLabel.toolTip = title;
-				_titleLabel.height = _preferredHeight;
+
+				if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+					_titleLabel.height = _preferredHeight;
+
+				_titleLabel.validate();
 				addChild(_titleLabel);
 			}
 
@@ -40,9 +44,12 @@ package ch.adolio.display.ui.inspector.entry
 			_valueLabel.styleName = InspectorConfiguration.STYLE_NAME_LABEL_ENTRY_VALUE;
 			_valueLabel.text = _getterFunc();
 			_valueLabel.toolTip = _valueLabel.text;
-			_valueLabel.height = _preferredHeight;
-			addChild(_valueLabel);
+
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				_valueLabel.height = _preferredHeight;
+
 			_valueLabel.validate();
+			addChild(_valueLabel);
 		}
 
 		//---------------------------------------------------------------------

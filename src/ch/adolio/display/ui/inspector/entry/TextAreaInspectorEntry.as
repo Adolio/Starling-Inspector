@@ -36,16 +36,23 @@ package ch.adolio.display.ui.inspector.entry
 			_label.styleName = InspectorConfiguration.STYLE_NAME_LABEL_ENTRY_TITLE;
 			_label.text = title;
 			_label.toolTip = title;
-			_label.height = _preferredHeight;
+
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				_label.height = _preferredHeight;
+
+			_label.validate();
 			addChild(_label);
 
 			_input = new TextArea();
 			_input.styleName = InspectorConfiguration.STYLE_NAME_TEXT_AREA;
-			_input.height = _preferredHeight;
+
+			if (!isNaN(_preferredHeight) && _preferredHeight > 0)
+				_input.height = _preferredHeight;
+
 			_input.text = getterFunc();
 			_input.isEditable = _setterFunc;
-			addChild(_input);
 			_input.validate();
+			addChild(_input);
 
 			width = _preferredWidth;
 		}
